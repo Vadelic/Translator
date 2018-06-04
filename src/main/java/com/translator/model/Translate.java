@@ -6,12 +6,12 @@ import javax.persistence.*;
  * Created by Komyshenets on 08.10.2017.
  */
 @Entity
-@Table(name = "translate_words")
+@Table(name = "translate")
 public class Translate {
 
     private int id;
 
-    private Word original;
+    private Word word;
     private Language language;
     private String translate;
     private String site_source;
@@ -25,15 +25,6 @@ public class Translate {
         this.site_source = site_source;
     }
 
-    public Translate(Word word, Language language) {
-        this.original = word;
-        this.language = language;
-
-    }
-
-    public Translate() {
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
@@ -45,13 +36,13 @@ public class Translate {
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "original_word_id")
-    public Word getOriginal() {
-        return original;
+    @JoinColumn(name = "word_id")
+    public Word getWord() {
+        return word;
     }
 
-    public void setOriginal(Word original) {
-        this.original = original;
+    public void setWord(Word word) {
+        this.word = word;
     }
 
     @Column(name = "translate")
@@ -63,7 +54,7 @@ public class Translate {
         this.translate = translate;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lang_id")
     public Language getLanguage() {
         return language;

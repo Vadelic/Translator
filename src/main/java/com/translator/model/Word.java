@@ -7,17 +7,16 @@ import java.util.List;
  * Created by Komyshenets on 08.10.2017.
  */
 @Entity
-@Table(name = "original_words")
+@Table(name = "words")
 public class Word {
     private int id;
 
-    private Language language;
     private String word;
+    private Language language;
     private String subject;
+
     private String phoneme;
-    private String usages;
     private List<Translate> translates;
-//    private Translate translate;
     private List<UsageSentence> sentences;
 
     @OneToMany(mappedBy = "word", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
@@ -85,12 +84,4 @@ public class Word {
         this.phoneme = phoneme;
     }
 
-    @Column(name = "usages")
-    public String getUsages() {
-        return usages;
-    }
-
-    public void setUsages(String usages) {
-        this.usages = usages;
-    }
 }

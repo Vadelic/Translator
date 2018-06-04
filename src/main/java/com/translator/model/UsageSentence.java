@@ -1,30 +1,31 @@
 package com.translator.model;
 
 import javax.persistence.*;
+import java.util.Map;
 
 /**
  * Created by Komyshenets on 12/10/2017.
  */
 @Entity
-@Table(name = "usages_word")
+@Table(name = "sentence")
 public class UsageSentence {
     private int id;
 
     private Word word;
-    private Language langTo;
-    private String sentenceFrom;
-    private String sentenceTo;
+    private Language language;
+    private Map sentence;
     private String site_source;
 
-    public UsageSentence() {
+    @ElementCollection
+    @MapKeyColumn(name="sentence_original")
+    @Column(name="sentence_translate")
+    @CollectionTable(name="sentence", joinColumns=@JoinColumn(name="word_id"))
+    public Map getSentence() {
+        return sentence;
     }
 
-
-    public UsageSentence(Word word, Language langTo, String sentenceFrom, String sentenceTo) {
-        this.word = word;
-        this.langTo = langTo;
-        this.sentenceFrom = sentenceFrom;
-        this.sentenceTo = sentenceTo;
+    public void setSentence(Map sentence) {
+        this.sentence = sentence;
     }
 
     @Id
@@ -38,7 +39,7 @@ public class UsageSentence {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "original_word_id")
+    @JoinColumn(name = "word_id")
     public Word getWord() {
         return word;
     }
@@ -49,31 +50,13 @@ public class UsageSentence {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lang_translate_id")
-    public Language getLangTo() {
-        return langTo;
+    @JoinColumn(name = "lang_id")
+    public Language getLanguage() {
+        return language;
     }
 
-    public void setLangTo(Language langTo) {
-        this.langTo = langTo;
-    }
-
-    @Column(name = "sentence_original")
-    public String getSentenceFrom() {
-        return sentenceFrom;
-    }
-
-    public void setSentenceFrom(String sentenceFrom) {
-        this.sentenceFrom = sentenceFrom;
-    }
-
-    @Column(name = "sentence_translate")
-    public String getSentenceTo() {
-        return sentenceTo;
-    }
-
-    public void setSentenceTo(String sentenceTo) {
-        this.sentenceTo = sentenceTo;
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 
     public void setSite_source(String helper) {

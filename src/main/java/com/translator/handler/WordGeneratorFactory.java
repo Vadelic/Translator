@@ -1,9 +1,10 @@
 package com.translator.handler;
 
-import com.sun.istack.internal.NotNull;
 import com.translator.model.Language;
 import com.translator.model.Translate;
 import com.translator.model.Word;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by Komyshenets on 12/1/2017.
@@ -28,8 +29,8 @@ public class WordGeneratorFactory {
     }
 
     public static TranslateGenerator translateGenerator(@NotNull Translate translate) {
-        String wordOriginal = translate.getOriginal().getWord();
-        String wordLang = translate.getOriginal().getLanguage().getCode();
+        String wordOriginal = translate.getWord().getWord();
+        String wordLang = translate.getWord().getLanguage().getCode();
         String targetLang = translate.getLanguage().getCode();
 
         return new DefaultTranslateGenerator(wordOriginal, wordLang, targetLang);
