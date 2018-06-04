@@ -14,12 +14,11 @@ public class UsageSentence {
     private Word word;
     private Language language;
     private Map sentence;
+    private String sentenceFrom;
+    private String sentenceTo;
     private String site_source;
 
-    @ElementCollection
-    @MapKeyColumn(name="sentence_original")
-    @Column(name="sentence_translate")
-    @CollectionTable(name="sentence", joinColumns=@JoinColumn(name="word_id"))
+
     public Map getSentence() {
         return sentence;
     }
@@ -57,6 +56,24 @@ public class UsageSentence {
 
     public void setLanguage(Language language) {
         this.language = language;
+    }
+
+    @Column(name = "sentence_original")
+    public String getSentenceFrom() {
+        return sentenceFrom;
+    }
+
+    public void setSentenceFrom(String sentenceFrom) {
+        this.sentenceFrom = sentenceFrom;
+    }
+
+    @Column(name = "sentence_translate")
+    public String getSentenceTo() {
+        return sentenceTo;
+    }
+
+    public void setSentenceTo(String sentenceTo) {
+        this.sentenceTo = sentenceTo;
     }
 
     public void setSite_source(String helper) {

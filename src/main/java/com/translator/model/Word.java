@@ -2,6 +2,7 @@ package com.translator.model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Komyshenets on 08.10.2017.
@@ -17,14 +18,19 @@ public class Word {
 
     private String phoneme;
     private List<Translate> translates;
-    private List<UsageSentence> sentences;
+    private Map<String, String> sentences;
 
-    @OneToMany(mappedBy = "word", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    public List<UsageSentence> getSentences() {
+
+
+    @ElementCollection
+    @MapKeyColumn(name="sentence_original")
+    @Column(name="sentence_translate")
+    @CollectionTable(name="sentence", joinColumns=@JoinColumn(name="word_id"))
+    public Map<String, String> getSentences() {
         return sentences;
     }
 
-    public void setSentences(List<UsageSentence> sentences) {
+    public void setSentences(Map<String, String> sentences) {
         this.sentences = sentences;
     }
 

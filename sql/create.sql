@@ -38,7 +38,7 @@ CREATE TABLE translator.translate (
   PRIMARY KEY (id),
 
   CONSTRAINT translate_word_id_lang_id_pk
-  UNIQUE (original_word_id, lang_id),
+  UNIQUE (word_id, lang_id),
 
   CONSTRAINT translate_lang_id_fk
   FOREIGN KEY (lang_id)  REFERENCES translator.language (id),
