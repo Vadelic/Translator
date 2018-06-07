@@ -4,7 +4,6 @@ import com.translator.dao.LangRepository;
 import com.translator.dao.WordRepository;
 import com.translator.model.Language;
 import com.translator.model.Word;
-import org.apache.commons.codec.language.bm.Lang;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,8 +30,8 @@ public class WEBController {
     }
 
     @RequestMapping("/addLang")
-    public Iterable<Language> AddLanguage() {
-        return langRepository.save(new Language());
+    public Language addLanguage(@RequestParam(value = "lang") String lang) {
+        return langRepository.save(new Language(lang));
     }
 
     @RequestMapping("/words")
