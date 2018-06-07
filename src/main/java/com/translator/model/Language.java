@@ -6,29 +6,24 @@ import javax.persistence.*;
 @Table(name = "language")
 public class Language {
 
-    private int id;
     private String code;
     private String description;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getId() {
-        return id;
+    public Language(String lang) {
+        code = lang;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     @Column(name = "description")
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "code")
     public String getCode() {
         return code;

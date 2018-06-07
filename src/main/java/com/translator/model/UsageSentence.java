@@ -13,19 +13,10 @@ public class UsageSentence {
 
     private Word word;
     private Language language;
-    private Map sentence;
     private String sentenceFrom;
     private String sentenceTo;
     private String site_source;
 
-
-    public Map getSentence() {
-        return sentence;
-    }
-
-    public void setSentence(Map sentence) {
-        this.sentence = sentence;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
