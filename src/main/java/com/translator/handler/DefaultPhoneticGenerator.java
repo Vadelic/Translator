@@ -2,6 +2,8 @@ package com.translator.handler;
 
 import com.translator.dictionary.ConfigFactory;
 import com.translator.dictionary.PhonemeConfig;
+import com.translator.model.Language;
+import com.translator.model.Word;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -10,58 +12,30 @@ import java.util.Map;
 /**
  * Created by Komyshenets on 12/1/2017.
  */
-public class DefaultPhoneticGenerator implements PhoneticGenerator {
+public class DefaultPhoneticGenerator  {
     private final Logger log = Logger.getLogger(getClass());
-    private String wordOriginal;
-    private String wordLang;
+    private Word word;
+    private Language language;
 
-    DefaultPhoneticGenerator(String wordOriginal, String wordLang) {
-        this.wordOriginal = wordOriginal;
-        this.wordLang = wordLang;
+    public DefaultPhoneticGenerator(Word wordOriginal, Language wordLang) {
+        this.word = wordOriginal;
+        this.language = wordLang;
     }
 
 
-    @Override
-    public Map<String, String> getPhonetic() {
-        HashMap<String, String> map = new HashMap<>();
-        Iterable<PhonemeConfig> configs = ConfigFactory.getPhoneticConfigs(wordOriginal, wordLang);
+    public String getPhonetic() {
+        Iterable<PhonemeConfig> configs = ConfigFactory.getPhoneticConfigs(word.getWord(), language.getCode());
         for (PhonemeConfig config : configs) {
             try {
-                String parseResult = config.getPhoneme();
-                log.debug(String.format("%s - %s (%s)", wordOriginal, parseResult, config.getClass()));
-                if (parseResult != null) {
-                    map.put(config.getClass().getSimpleName(), parseResult);
-                    return map;
+                String phoneme = config.getPhoneme();
+                log.debug(String.format("Parse and result: %s (%s)", config.getAddress(), phoneme));
+                if (phoneme != null) {
+                    return phoneme;
                 }
             } catch (Exception e) {
-                log.warn(String.format("Error while parsing : %s, %s", wordOriginal, config.getClass()), e);
+                log.warn(String.format("Error while parsing phoneme: %s", config.getAddress()), e);
             }
         }
-        return map;
+        return null;
     }
-
-
-    //    private SendPhoto updateCard( Word word , Person person) {
-//        try {
-//            File file = new File("images", randomWord.toLowerCase() + ".jpg");
-//            System.out.println(file.getAbsolutePath());
-//            if (!file.exists()) {
-//                file = new GoogleImageSearch().searchImages(file.getParent(), file.getName());
-//            }
-//
-//            SendPhoto card = new SendPhoto().setNewPhoto(file).setChatId(person.getId());
-//            card.disableNotification();
-//
-//            return card;
-//        } catch (IOException e) {
-//            log.warn("error while getting image", e);
-//
-//        }
-//        return null;
-//    }
-//
-//    boolean updateAudio(Word word) {
-//        return false;
-//    }
-
 }

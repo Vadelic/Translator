@@ -22,7 +22,6 @@ public class GoogleTranslate implements TranslateConfig {
     private final Logger log = Logger.getLogger(getClass());
 
     private static final String KEY_API = "AIzaSyDQQA7BNS57D1Lw2lHD5jIOu5LryxnLi7E";
-    private static final String URL = "https://translation.googleapis.com/language/translate/v2";
 
     private String original;
     private String from;
@@ -36,7 +35,7 @@ public class GoogleTranslate implements TranslateConfig {
 
     private JSONObject getJsonObject(String original, String langFrom, String langTo) throws IOException {
 
-        URL urlObj = new URL(URL);
+        URL urlObj = new URL(getAddress());
         HttpsURLConnection connection = (HttpsURLConnection) urlObj.openConnection();
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
@@ -77,5 +76,10 @@ public class GoogleTranslate implements TranslateConfig {
             }
         log.debug(String.format("cud't translate '%s' %s-%s", original, from, to));
         return null;
+    }
+
+    @Override
+    public String getAddress() {
+        return "https://translation.googleapis.com/language/translate/v2";
     }
 }

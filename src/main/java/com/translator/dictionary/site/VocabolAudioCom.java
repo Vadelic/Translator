@@ -31,7 +31,7 @@ public class VocabolAudioCom extends SiteConnector implements PhonemeConfig, Tra
 
     @Override
     public String getPhoneme() {
-        HtmlPage page = connectAndGetPage(String.format(URL, translateLang, word));
+        HtmlPage page = connectAndGetPage(getAddress());
         if (page != null) {
             DomElement elementById = page.getElementById("IPA_" + word);
             if (elementById != null) {
@@ -41,10 +41,14 @@ public class VocabolAudioCom extends SiteConnector implements PhonemeConfig, Tra
         return null;
     }
 
+    @Override
+    public String getAddress() {
+        return String.format(URL, translateLang, word);
+    }
 
     @Override
     public String getTranslate() {
-        HtmlPage page = connectAndGetPage(String.format(URL, translateLang, word));
+        HtmlPage page = connectAndGetPage(String.format(getAddress()));
         if (page != null) {
             DomElement elementById = page.getElementById("translation_" + word);
             if (elementById != null) {

@@ -12,4 +12,5 @@ public interface TranslateConfig  {
     @Nullable
     String getTranslate() throws IOException;
 
+    String getAddress();
 }

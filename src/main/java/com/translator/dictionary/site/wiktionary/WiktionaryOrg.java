@@ -29,6 +29,10 @@ public class WiktionaryOrg extends SiteConnector implements PhonemeConfig {
         this.word = wordOriginal.toLowerCase();
         this.wordLang = landMap.get(wordLang.toLowerCase());
     }
+    @Override
+    public String getAddress() {
+        return String.format("https://en.wiktionary.org/wiki/%s", word);
+    }
 
     private ParseChain pronunciationChain(String language) {
         return new LanguageBlock(language)
@@ -39,7 +43,7 @@ public class WiktionaryOrg extends SiteConnector implements PhonemeConfig {
 
     @Override
     public String getPhoneme() {
-        HtmlPage page = connectAndGetPage(String.format("https://en.wiktionary.org/wiki/%s", word));
+        HtmlPage page = connectAndGetPage(getAddress());
         if (page != null) {
             HtmlElement documentElement = page.getDocumentElement();
             List<HtmlElement> parserOutput = documentElement.getElementsByAttribute("div", "class", "mw-parser-output");
@@ -56,4 +60,6 @@ public class WiktionaryOrg extends SiteConnector implements PhonemeConfig {
         }
         return null;
     }
+
+
 }

@@ -24,17 +24,22 @@ public class WordReferenceCom extends SiteConnector implements PhonemeConfig, Tr
 
     @Override
     public String getTranslate() {
-        HtmlPage page = connectAndGetPage(String.format(URL, wordLang, translateLang, word));
+        HtmlPage page = connectAndGetPage(getAddress());
         if (page != null) {
             // TODO: 12/12/2017 parce and return
         }
         return null;
     }
 
+    @Override
+    public String getAddress() {
+        return String.format(URL, wordLang, translateLang, word);
+    }
+
 
     @Override
     public String getPhoneme() throws IOException {
-        HtmlPage page = connectAndGetPage(String.format(URL, wordLang, wordLang, word));
+        HtmlPage page = connectAndGetPage(getAddress());
         if (page != null) {
             // TODO: 12/12/2017 parce and return
         }

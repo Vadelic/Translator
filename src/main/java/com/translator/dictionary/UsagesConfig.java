@@ -13,4 +13,5 @@ public interface UsagesConfig {
     @Nullable
     Map<String, String> getUsages() throws IOException;
 
+    String getAddress();
 }

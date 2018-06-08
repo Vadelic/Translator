@@ -1,6 +1,5 @@
-package com.translator.dao;
+package com.translator.repository;
 
-import com.translator.model.Language;
 import com.translator.model.Word;
 import org.springframework.data.repository.CrudRepository;
 

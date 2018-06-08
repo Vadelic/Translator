@@ -11,4 +11,6 @@ import java.io.IOException;
 public interface PhonemeConfig  {
     @Nullable
     String getPhoneme() throws IOException;
+
+    String getAddress();
 }

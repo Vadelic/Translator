@@ -13,7 +13,6 @@ import java.util.Map;
  * Created by Komyshenets on 12/12/2017.
  */
 public class ContextReversoNet extends SiteConnector implements UsagesConfig {
-    private final static String URL = "http://context.reverso.net/translation/%s-%s/%s";
     private String word;
     private String wordLang;
     private String targetLang;
@@ -23,6 +22,10 @@ public class ContextReversoNet extends SiteConnector implements UsagesConfig {
         landMap.put("ru", "russian");
         landMap.put("it", "italian");
         landMap.put("en", "english");
+    }
+    @Override
+    public String getAddress() {
+        return String.format("http://context.reverso.net/translation/%s-%s/%s", wordLang, targetLang, word);
     }
 
     public ContextReversoNet(String word, String wordLang, String targetLang) {
@@ -34,7 +37,7 @@ public class ContextReversoNet extends SiteConnector implements UsagesConfig {
     @Override
     public Map<String, String> getUsages() {
         Map<String, String> map = new HashMap<>();
-        HtmlPage page = connectAndGetPage(String.format(URL, wordLang, targetLang, word));
+        HtmlPage page = connectAndGetPage(getAddress());
         if (page != null) {
             List<Object> byXPath = page.getByXPath("//section[@id='examples-content']/div[@class='example']");
             for (Object o : byXPath) {

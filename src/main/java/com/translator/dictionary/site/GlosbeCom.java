@@ -21,10 +21,13 @@ public class GlosbeCom extends SiteConnector implements TranslateConfig, UsagesC
         this.word = word.toLowerCase();
         this.wordLang = wordLang;
     }
-
+    @Override
+    public String getAddress() {
+        return String.format(URL, wordLang, targetLang, word);
+    }
     @Override
     public String getTranslate() {
-        HtmlPage page = connectAndGetPage(String.format(URL, wordLang, targetLang, word));
+        HtmlPage page = connectAndGetPage(getAddress());
         if (page != null) {
             DomElement elementById = page.getElementById("phraseTranslation");
 
@@ -46,7 +49,7 @@ public class GlosbeCom extends SiteConnector implements TranslateConfig, UsagesC
     @Override
     public Map<String, String> getUsages() {
         Map<String, String> map = new HashMap<>();
-        HtmlPage page = connectAndGetPage(String.format(URL, wordLang, targetLang, word));
+        HtmlPage page = connectAndGetPage(getAddress());
         if (page != null) {
             List<Object> byXPath = page.getByXPath("//div[@id='tmTable']/div");
             for (Object o : byXPath) {

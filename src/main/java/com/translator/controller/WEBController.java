@@ -1,7 +1,7 @@
 package com.translator.controller;
 
-import com.translator.dao.LangRepository;
-import com.translator.dao.WordRepository;
+import com.translator.repository.LangRepository;
+import com.translator.repository.WordRepository;
 import com.translator.model.Language;
 import com.translator.model.Word;
 import org.springframework.beans.factory.annotation.Autowired;

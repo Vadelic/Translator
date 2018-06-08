@@ -2,6 +2,7 @@ package com.translator.model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Komyshenets on 08.10.2017.
@@ -14,8 +15,8 @@ public class Word {
     private String word;
     private Language language;
     private String subject;
-
     private String phoneme;
+
     private List<Translate> translates;
     private List<UsageSentence> sentences;
 
@@ -84,4 +85,11 @@ public class Word {
         this.phoneme = phoneme;
     }
 
+    public List<Translate> getTranslateForLang(Language language) {
+        return translates.stream().filter(tr -> tr.getLanguage().equals(language)).collect(Collectors.toList());
+    }
+
+    public List<UsageSentence> getUsagesForLang(Language language) {
+        return sentences.stream().filter(st -> st.getLanguage().equals(language)).collect(Collectors.toList());
+    }
 }

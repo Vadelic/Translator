@@ -16,6 +16,15 @@ public class Translate {
     private String translate;
     private String site_source;
 
+    public Translate(Word word, Language language, String translate) {
+        this.word = word;
+        this.language = language;
+        this.translate = translate;
+    }
+
+    public Translate() {
+    }
+
     @Column(name = "site_source")
     public String getSite_source() {
         return site_source;

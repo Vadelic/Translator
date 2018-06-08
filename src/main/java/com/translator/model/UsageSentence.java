@@ -17,6 +17,15 @@ public class UsageSentence {
     private String sentenceTo;
     private String site_source;
 
+    public UsageSentence(Word word, Language language, String sentenceFrom, String sentenceTo) {
+        this.word = word;
+        this.language = language;
+        this.sentenceFrom = sentenceFrom;
+        this.sentenceTo = sentenceTo;
+    }
+
+    public UsageSentence() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,6 +79,7 @@ public class UsageSentence {
     public void setSite_source(String helper) {
         this.site_source = helper;
     }
+
     @Column(name = "site_source")
     public String getSite_source() {
         return site_source;
