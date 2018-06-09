@@ -13,7 +13,7 @@ public class DtoFactory {
         wordDTO.language = word.getLanguage().getCode();
         wordDTO.phoneme = word.getPhoneme();
         wordDTO.subject = word.getSubject();
-        
+
 
         return null;
     }

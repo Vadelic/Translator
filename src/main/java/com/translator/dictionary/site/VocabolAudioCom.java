@@ -4,6 +4,7 @@ import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.translator.dictionary.PhonemeConfig;
 import com.translator.dictionary.TranslateConfig;
+import com.translator.utils.SiteConnector;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -12,26 +13,35 @@ import java.util.TreeSet;
 /**
  * Created by Komyshenets on 11/17/2017.
  */
-public class VocabolAudioCom extends SiteConnector implements PhonemeConfig, TranslateConfig {
-    private final static String URL = "http://%s.vocabolaudio.com/it/%s";
-    private String word;
-    private String translateLang;
-
-
+public class VocabolAudioCom implements PhonemeConfig, TranslateConfig {
+    private String word = null;
+    private String translateLang = null;
     //    http://ru.vocabolaudio.com/audio-it/sinistro.mp3
-    public VocabolAudioCom(String word, String translateLang) {
+
+    @Override
+    public String getAddress() {
+        return String.format("http://%s.vocabolaudio.com/it/%s", translateLang, word);
+    }
+
+    @Override
+    public void setWord(String word) {
         this.word = word.toLowerCase();
-        this.translateLang = translateLang.toLowerCase();
     }
 
-    public VocabolAudioCom(String wordOriginal) {
-        this(wordOriginal, "en");
+    @Override
+    public void setLangTo(String langTo) {
+        translateLang = langTo.toLowerCase();
     }
 
+    @Override
+    public void setLangFrom(String langFrom) {
+        //only italian words
+    }
 
     @Override
     public String getPhoneme() {
-        HtmlPage page = connectAndGetPage(getAddress());
+        setLangTo("en");
+        HtmlPage page = new SiteConnector().connectAndGetPage(getAddress());
         if (page != null) {
             DomElement elementById = page.getElementById("IPA_" + word);
             if (elementById != null) {
@@ -42,13 +52,8 @@ public class VocabolAudioCom extends SiteConnector implements PhonemeConfig, Tra
     }
 
     @Override
-    public String getAddress() {
-        return String.format(URL, translateLang, word);
-    }
-
-    @Override
     public String getTranslate() {
-        HtmlPage page = connectAndGetPage(String.format(getAddress()));
+        HtmlPage page = new SiteConnector().connectAndGetPage(getAddress());
         if (page != null) {
             DomElement elementById = page.getElementById("translation_" + word);
             if (elementById != null) {

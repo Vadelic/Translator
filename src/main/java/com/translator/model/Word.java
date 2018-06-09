@@ -19,6 +19,7 @@ public class Word {
 
     private List<Translate> translates;
     private List<UsageSentence> sentences;
+    private List<TranslatePack> translatePacks;
 
     @OneToMany(mappedBy = "word", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     public List<UsageSentence> getSentences() {

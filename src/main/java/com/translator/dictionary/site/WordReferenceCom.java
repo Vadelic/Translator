@@ -3,28 +3,43 @@ package com.translator.dictionary.site;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.translator.dictionary.PhonemeConfig;
 import com.translator.dictionary.TranslateConfig;
+import com.translator.exception.DictionaryConfigException;
+import com.translator.utils.SiteConnector;
 
 import java.io.IOException;
 
 /**
  * Created by Komyshenets on 12/3/2017.
  */
-public class WordReferenceCom extends SiteConnector implements PhonemeConfig, TranslateConfig {
-    private final static String URL = "http://www.wordreference.com/%s%s/%s";
-    private String word;
-    private String wordLang;
-    private String translateLang;
+public class WordReferenceCom implements PhonemeConfig, TranslateConfig {
+    private String word = null;
+    private String wordLang = null;
+    private String translateLang = null;
 
-    public WordReferenceCom(String word, String wordLang, String translateLang) {
-        this.translateLang = translateLang;
+    @Override
+    public String getAddress() {
+        return String.format("http://www.wordreference.com/%s%s/%s", wordLang, translateLang, word);
+    }
+
+    @Override
+    public void setWord(String word) {
         this.word = word.toLowerCase();
-        this.wordLang = wordLang;
+    }
+
+    @Override
+    public void setLangFrom(String langFrom) {
+        this.wordLang = langFrom.toLowerCase();
+    }
+
+    @Override
+    public void setLangTo(String langTo) {
+        translateLang = langTo.toLowerCase();
     }
 
 
     @Override
     public String getTranslate() {
-        HtmlPage page = connectAndGetPage(getAddress());
+        HtmlPage page = new SiteConnector().connectAndGetPage(getAddress());
         if (page != null) {
             // TODO: 12/12/2017 parce and return
         }
@@ -32,14 +47,8 @@ public class WordReferenceCom extends SiteConnector implements PhonemeConfig, Tr
     }
 
     @Override
-    public String getAddress() {
-        return String.format(URL, wordLang, translateLang, word);
-    }
-
-
-    @Override
-    public String getPhoneme() throws IOException {
-        HtmlPage page = connectAndGetPage(getAddress());
+    public String getPhoneme() throws DictionaryConfigException {
+        HtmlPage page = new SiteConnector().connectAndGetPage(getAddress());
         if (page != null) {
             // TODO: 12/12/2017 parce and return
         }

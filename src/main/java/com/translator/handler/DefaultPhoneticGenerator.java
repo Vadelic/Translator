@@ -2,6 +2,7 @@ package com.translator.handler;
 
 import com.translator.dictionary.ConfigFactory;
 import com.translator.dictionary.PhonemeConfig;
+import com.translator.exception.DictionaryConfigException;
 import com.translator.model.Language;
 import com.translator.model.Word;
 import org.apache.log4j.Logger;
@@ -32,7 +33,7 @@ public class DefaultPhoneticGenerator  {
                 if (phoneme != null) {
                     return phoneme;
                 }
-            } catch (Exception e) {
+            } catch (DictionaryConfigException e) {
                 log.warn(String.format("Error while parsing phoneme: %s", config.getAddress()), e);
             }
         }

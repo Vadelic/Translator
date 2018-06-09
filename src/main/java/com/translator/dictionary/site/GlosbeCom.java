@@ -3,31 +3,43 @@ package com.translator.dictionary.site;
 import com.gargoylesoftware.htmlunit.html.*;
 import com.translator.dictionary.TranslateConfig;
 import com.translator.dictionary.UsagesConfig;
+import com.translator.utils.SiteConnector;
 
 import java.util.*;
 
 /**
  * Created by Komyshenets on 12/7/2017.
  */
-public class GlosbeCom extends SiteConnector implements TranslateConfig, UsagesConfig {
-    private final static String URL = "https://glosbe.com/%s/%s/%s";
+public class GlosbeCom implements TranslateConfig, UsagesConfig {
     private final int MAX_USAGE_LENGTH = 300;
-    private String word;
-    private String wordLang;
-    private String targetLang;
+    private String word = null;
+    private String wordLang = null;
+    private String targetLang = null;
 
-    public GlosbeCom(String word, String wordLang, String translateLang) {
-        this.targetLang = translateLang;
+
+    @Override
+    public void setWord(String word) {
         this.word = word.toLowerCase();
-        this.wordLang = wordLang;
     }
+
+    @Override
+    public void setLangFrom(String langFrom) {
+        this.wordLang = langFrom.toLowerCase();
+    }
+
+    @Override
+    public void setLangTo(String langTo) {
+        this.targetLang = langTo.toLowerCase();
+    }
+
     @Override
     public String getAddress() {
-        return String.format(URL, wordLang, targetLang, word);
+        return String.format("https://glosbe.com/%s/%s/%s", wordLang, targetLang, word);
     }
+
     @Override
     public String getTranslate() {
-        HtmlPage page = connectAndGetPage(getAddress());
+        HtmlPage page = new SiteConnector().connectAndGetPage(getAddress());
         if (page != null) {
             DomElement elementById = page.getElementById("phraseTranslation");
 
@@ -49,7 +61,7 @@ public class GlosbeCom extends SiteConnector implements TranslateConfig, UsagesC
     @Override
     public Map<String, String> getUsages() {
         Map<String, String> map = new HashMap<>();
-        HtmlPage page = connectAndGetPage(getAddress());
+        HtmlPage page = new SiteConnector().connectAndGetPage(getAddress());
         if (page != null) {
             List<Object> byXPath = page.getByXPath("//div[@id='tmTable']/div");
             for (Object o : byXPath) {

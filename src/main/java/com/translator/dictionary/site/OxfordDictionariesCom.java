@@ -3,17 +3,13 @@ package com.translator.dictionary.site;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.translator.dictionary.PhonemeConfig;
+import com.translator.utils.SiteConnector;
 
 /**
  * Created by Komyshenets on 12/11/2017.
  */
-public class OxfordDictionariesCom extends SiteConnector implements PhonemeConfig {
-    private String word;
-
-    public OxfordDictionariesCom(String wordOriginal) {
-        this.word = wordOriginal.toLowerCase();
-    }
-
+public class OxfordDictionariesCom implements PhonemeConfig {
+    private String word = null;
 
     @Override
     public String getAddress() {
@@ -22,7 +18,7 @@ public class OxfordDictionariesCom extends SiteConnector implements PhonemeConfi
 
     @Override
     public String getPhoneme() {
-        HtmlPage page = connectAndGetPage(getAddress());
+        HtmlPage page = new SiteConnector().connectAndGetPage(getAddress());
         if (page != null) {
             Object firstByXPath = page.getFirstByXPath("//span[@class='phoneticspelling']");
             if (firstByXPath instanceof DomNode) {
@@ -30,6 +26,21 @@ public class OxfordDictionariesCom extends SiteConnector implements PhonemeConfi
             }
         }
         return null;
+    }
+
+    @Override
+    public void setWord(String word) {
+        this.word = word.toLowerCase();
+    }
+
+    @Override
+    public void setLangFrom(String langFrom) {
+
+    }
+
+    @Override
+    public void setLangTo(String langTo) {
+
     }
 
 }

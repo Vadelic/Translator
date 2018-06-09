@@ -1,6 +1,7 @@
-package com.translator.dictionary.rest;
+package com.translator.dictionary;
 
 import com.translator.dictionary.TranslateConfig;
+import com.translator.exception.DictionaryConfigException;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,6 +14,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 /**
@@ -21,17 +23,42 @@ import java.util.stream.Collectors;
 public class GoogleTranslate implements TranslateConfig {
     private final Logger log = Logger.getLogger(getClass());
 
-    private static final String KEY_API = "AIzaSyDQQA7BNS57D1Lw2lHD5jIOu5LryxnLi7E";
+    private String KEY_API = "AIzaSyDQQA7BNS57D1Lw2lHD5jIOu5LryxnLi7E";
 
     private String original;
     private String from;
     private String to;
 
-    public GoogleTranslate(String original, String from, String to) {
-        this.original = original.toLowerCase();
-        this.from = from;
-        this.to = to;
+    public GoogleTranslate() throws DictionaryConfigException {
+        Properties properties = getLangProperties("google.properties");
+        this.KEY_API = properties.getProperty("key_api");
     }
+    private Properties getLangProperties(String propertyName) throws DictionaryConfigException {
+        try {
+            Properties properties = new Properties();
+            properties.load(this.getClass().getResourceAsStream(propertyName));
+            return properties;
+        } catch (IOException e) {
+            log.error("Error during load properties");
+            throw new DictionaryConfigException("Error during load properties", e);
+        }
+    }
+
+    @Override
+    public void setWord(String word) {
+        this.original = word.toLowerCase();
+    }
+
+    @Override
+    public void setLangFrom(String langFrom) {
+        this.from = langFrom.toLowerCase();
+    }
+
+    @Override
+    public void setLangTo(String langTo) {
+        to = langTo.toLowerCase();
+    }
+
 
     private JSONObject getJsonObject(String original, String langFrom, String langTo) throws IOException {
 
@@ -69,13 +96,17 @@ public class GoogleTranslate implements TranslateConfig {
     }
 
     @Override
-    public String getTranslate() throws IOException {
+    public String getTranslate() throws DictionaryConfigException {
+        try {
             String googleTranslateResult = parseJson();
             if (googleTranslateResult != null && !Objects.equals(googleTranslateResult.toLowerCase(), original)) {
                 return googleTranslateResult;
             }
-        log.debug(String.format("cud't translate '%s' %s-%s", original, from, to));
-        return null;
+            log.debug(String.format("cud't translate '%s' %s-%s", original, from, to));
+            return null;
+        } catch (IOException e) {
+            throw new DictionaryConfigException("Google exception while translating ", e);
+        }
     }
 
     @Override

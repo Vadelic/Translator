@@ -1,4 +1,4 @@
-package com.translator.dictionary.site;
+package com.translator.utils;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -10,11 +10,11 @@ import java.io.IOException;
 /**
  * Created by Komyshenets on 12/7/2017.
  */
-public abstract class SiteConnector {
+public class SiteConnector {
 
     protected final Logger log = Logger.getLogger(getClass());
 
-    protected HtmlPage connectAndGetPage(String link) {
+    public HtmlPage connectAndGetPage(String link) {
         try {
             WebClient webClient = new WebClient();
             webClient.getOptions().setJavaScriptEnabled(false);
