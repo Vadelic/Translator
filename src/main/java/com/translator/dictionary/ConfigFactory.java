@@ -14,13 +14,14 @@ public class ConfigFactory {
 
     public static Iterable<PhonemeConfig> getPhoneticConfigs(String word, String wordLang) {
         ArrayList<PhonemeConfig> configs = new ArrayList<>();
-        List<? extends Config> phoneme = getConfigs(PhonemeConfig.class, wordLang);
+        List<PhonemeConfig> phoneme = getConfigs(PhonemeConfig.class, wordLang);
 
 
         for (Config config : phoneme) {
             try {
                 config.setWord(word);
                 config.setLangFrom(wordLang);
+
                 configs.add(config);
             } catch (DictionaryConfigException e) {
                 e.printStackTrace();

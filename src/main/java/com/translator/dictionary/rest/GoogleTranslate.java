@@ -1,4 +1,4 @@
-package com.translator.dictionary;
+package com.translator.dictionary.rest;
 
 import com.translator.dictionary.TranslateConfig;
 import com.translator.exception.DictionaryConfigException;

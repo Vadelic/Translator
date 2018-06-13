@@ -1,4 +1,4 @@
-package com.translator.dictionary;
+package com.translator.dictionary.rest;
 
 import org.json.JSONObject;
 
