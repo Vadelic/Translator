@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by Komyshenets on 12/1/2017.
  */
-public class DefaultPhoneticGenerator  {
+public class DefaultPhoneticGenerator {
     private final Logger log = Logger.getLogger(getClass());
     private Word word;
     private Language language;
@@ -25,9 +25,12 @@ public class DefaultPhoneticGenerator  {
 
 
     public String getPhonetic() {
-        Iterable<PhonemeConfig> configs = ConfigFactory.getPhoneticConfigs(word.getWord(), language.getCode());
+        Iterable<PhonemeConfig> configs = ConfigFactory.getConfigs(PhonemeConfig.class, language.getCode());
         for (PhonemeConfig config : configs) {
             try {
+                config.setWord(word.getWord());
+                config.setLangFrom(language.getCode());
+
                 String phoneme = config.getPhoneme();
                 log.debug(String.format("Parse and result: %s (%s)", config.getAddress(), phoneme));
                 if (phoneme != null) {

@@ -1,52 +1,53 @@
 package com.translator.dictionary;
 
-import com.translator.dictionary.site.*;
-import com.translator.dictionary.site.wiktionary.WiktionaryOrg;
 import com.translator.exception.DictionaryConfigException;
+import org.apache.log4j.Logger;
+import sun.tools.java.ClassPath;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Created by Komyshenets on 11/17/2017.
  */
 public class ConfigFactory {
-
-    public static Iterable<PhonemeConfig> getPhoneticConfigs(String word, String wordLang) {
-        ArrayList<PhonemeConfig> configs = new ArrayList<>();
-        List<PhonemeConfig> phoneme = getConfigs(PhonemeConfig.class, wordLang);
+    private static final Logger log = Logger.getLogger(ConfigFactory.class);
+   private static final String CONFIG_PROPERTY = "configClasses.properties";
 
 
-        for (Config config : phoneme) {
-            try {
-                config.setWord(word);
-                config.setLangFrom(wordLang);
+    public static <T> List<T> getConfigs(Class<T> lass, String suffix) {
+        ArrayList<T> ts = new ArrayList<>();
+        try {
+            Properties properties = new Properties();
+            InputStream resourceAsStream = ConfigFactory.class.getResourceAsStream(CONFIG_PROPERTY);
+            properties.load(resourceAsStream);
+            String simpleName = lass.getSimpleName();
 
-                configs.add(config);
-            } catch (DictionaryConfigException e) {
-                e.printStackTrace();
-            }
+            ts.addAll(getValues(properties, simpleName + "." + suffix));
+            ts.addAll(getValues(properties, simpleName));
+        } catch (Exception e) {
+            log.warn(String.format("Can't load configs property: ", CONFIG_PROPERTY), e);
         }
 
 
-        return configs;
+        return ts;
     }
 
-    private static <T> List<T> getConfigs(Class<T> lass, String wordLang) {
-        String simpleName = lass.getSimpleName();
-        return null;
+    private static <T> Collection<? extends T> getValues(Properties property, String propertyKey) {
+        ArrayList<T> result = new ArrayList<>();
+
+        String value = property.getProperty(propertyKey);
+        if (value != null) {
+            for (String aClass : value.split(" ")) {
+                try {
+                    Object o = Class.forName(aClass.trim()).getDeclaredConstructor().newInstance();
+                    result.add((T) o);
+                } catch (Throwable e) {
+                    log.warn(String.format("Can't create instance %s", aClass.trim()), e);
+                }
+            }
+        }
+        return result;
     }
-
-
-    public static Iterable<TranslateConfig> getTranslateConfigs(String word, String wordLang, String targetLang) {
-        ArrayList<TranslateConfig> configs = new ArrayList<>();
-        return configs;
-    }
-
-    public static Iterable<UsagesConfig> getUsageConfigs(String word, String wordLang, String targetLang) {
-        ArrayList<UsagesConfig> configs = new ArrayList<>();
-
-        return configs;
-    }
-
 }

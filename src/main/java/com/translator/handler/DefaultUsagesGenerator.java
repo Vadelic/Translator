@@ -8,7 +8,6 @@ import com.translator.model.Word;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,13 +16,13 @@ import java.util.Map;
  */
 public class DefaultUsagesGenerator {
     private final Logger log = Logger.getLogger(getClass());
-    private Word wordOriginal;
+    private Word word;
     private Language wordLang;
     private Language targetLang;
 
 
     public DefaultUsagesGenerator(Word wordOriginal, Language wordLang, Language targetLang) {
-        this.wordOriginal = wordOriginal;
+        this.word = wordOriginal;
         this.wordLang = wordLang;
         this.targetLang = targetLang;
     }
@@ -31,9 +30,13 @@ public class DefaultUsagesGenerator {
     public List<UsageSentence> getUsages() {
         List<UsageSentence> usageSentences = new ArrayList<>();
 
-        Iterable<UsagesConfig> configs = ConfigFactory.getUsageConfigs(wordOriginal.getWord(), wordLang.getCode(), targetLang.getCode());
+        Iterable<UsagesConfig> configs = ConfigFactory.getConfigs(UsagesConfig.class, wordLang.getCode());
         for (UsagesConfig config : configs) {
             try {
+                config.setWord(word.getWord());
+                config.setLangFrom(wordLang.getCode());
+                config.setLangTo(targetLang.getCode());
+
                 Map<String, String> usages = config.getUsages();
                 if (!usages.isEmpty()) {
 
@@ -51,7 +54,7 @@ public class DefaultUsagesGenerator {
         List<UsageSentence> usageSentences = new ArrayList<>();
 
         for (Map.Entry<String, String> entry : usages.entrySet()) {
-            UsageSentence sentence = new UsageSentence(wordOriginal, wordLang, entry.getKey(), entry.getValue());
+            UsageSentence sentence = new UsageSentence(word, wordLang, entry.getKey(), entry.getValue());
             sentence.setSite_source(siteSource);
             usageSentences.add(sentence);
         }
