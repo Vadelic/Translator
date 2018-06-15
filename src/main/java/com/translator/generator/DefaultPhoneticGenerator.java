@@ -1,14 +1,10 @@
-package com.translator.handler;
+package com.translator.generator;
 
 import com.translator.dictionary.ConfigFactory;
 import com.translator.dictionary.PhonemeConfig;
 import com.translator.exception.DictionaryConfigException;
-import com.translator.model.Language;
 import com.translator.model.Word;
 import org.apache.log4j.Logger;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Komyshenets on 12/1/2017.
@@ -16,20 +12,18 @@ import java.util.Map;
 public class DefaultPhoneticGenerator {
     private final Logger log = Logger.getLogger(getClass());
     private Word word;
-    private Language language;
 
-    public DefaultPhoneticGenerator(Word wordOriginal, Language wordLang) {
+    public DefaultPhoneticGenerator(Word wordOriginal) {
         this.word = wordOriginal;
-        this.language = wordLang;
     }
 
 
     public String getPhonetic() {
-        Iterable<PhonemeConfig> configs = ConfigFactory.getConfigs(PhonemeConfig.class, language.getCode());
+        Iterable<PhonemeConfig> configs = ConfigFactory.getConfigs(PhonemeConfig.class, word.getLanguage().getCode());
         for (PhonemeConfig config : configs) {
             try {
                 config.setWord(word.getWord());
-                config.setLangFrom(language.getCode());
+                config.setLangFrom(word.getLanguage().getCode());
 
                 String phoneme = config.getPhoneme();
                 log.debug(String.format("Parse and result: %s (%s)", config.getAddress(), phoneme));

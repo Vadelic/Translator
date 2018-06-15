@@ -12,11 +12,6 @@ public class OxfordDictionariesCom implements PhonemeConfig {
     private String word = null;
 
     @Override
-    public String getAddress() {
-        return String.format("https://en.oxforddictionaries.com/definition/%s", word);
-    }
-
-    @Override
     public String getPhoneme() {
         HtmlPage page = new SiteConnector().connectAndGetPage(getAddress());
         if (page != null) {
@@ -26,6 +21,11 @@ public class OxfordDictionariesCom implements PhonemeConfig {
             }
         }
         return null;
+    }
+
+    @Override
+    public String getAddress() {
+        return String.format("https://en.oxforddictionaries.com/definition/%s", word);
     }
 
     @Override

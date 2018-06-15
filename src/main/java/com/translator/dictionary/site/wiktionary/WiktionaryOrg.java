@@ -29,8 +29,8 @@ public class WiktionaryOrg implements PhonemeConfig {
 
     @Override
     public void setLangFrom(String langFrom) throws DictionaryConfigException {
-        Properties properties = getLangProperties("contextReversoNet.properties");
-        this.wordLang = properties.getProperty(wordLang.toLowerCase());
+        Properties properties = getLangProperties("WiktionaryOrg.properties");
+        this.wordLang = properties.getProperty(langFrom.toLowerCase());
     }
 
     @Override

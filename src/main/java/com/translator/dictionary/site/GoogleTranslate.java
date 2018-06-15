@@ -38,7 +38,7 @@ public class GoogleTranslate implements TranslateConfig {
             Properties properties = new Properties();
             properties.load(this.getClass().getResourceAsStream(propertyName));
             return properties;
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Error during load properties");
             throw new DictionaryConfigException("Error during load properties", e);
         }

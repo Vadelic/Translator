@@ -9,8 +9,9 @@ public class Language {
     private String code;
     private String description;
 
-    public Language(String lang) {
-        code = lang;
+    public Language(String lang, String description) {
+        this.code = lang;
+        this.description = description;
     }
 
 
@@ -18,6 +19,7 @@ public class Language {
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }

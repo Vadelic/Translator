@@ -1,6 +1,7 @@
 package com.translator.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,11 +18,19 @@ public class Word {
     private String subject;
     private String phoneme;
 
-    private List<Translate> translates;
-    private List<UsageSentence> sentences;
-    private List<TranslatePack> translatePacks;
+    private List<Translate> translates = new ArrayList<>();
+    private List<UsageSentence> sentences = new ArrayList<>();
+    private List<TranslatePack> translatePacks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "word", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    public Word(String word, Language language) {
+        this.word = word;
+        this.language = language;
+    }
+
+    public Word() {
+    }
+
+    @OneToMany(mappedBy = "word", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     public List<UsageSentence> getSentences() {
         return sentences;
     }
@@ -30,7 +39,7 @@ public class Word {
         this.sentences = sentences;
     }
 
-    @OneToMany(mappedBy = "original", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "word", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     public List<Translate> getTranslates() {
         return translates;
     }

@@ -32,13 +32,13 @@ public class ContextReversoNet implements UsagesConfig {
     @Override
     public void setLangFrom(String langFrom) throws DictionaryConfigException {
         Properties properties = getLangProperties("contextReversoNet.properties");
-        this.wordLang = properties.getProperty(wordLang.toLowerCase());
+        this.wordLang = properties.getProperty(langFrom.toLowerCase());
     }
 
     @Override
     public void setLangTo(String langTo) throws DictionaryConfigException {
         Properties properties = getLangProperties("contextReversoNet.properties");
-        this.targetLang = properties.getProperty(targetLang.toLowerCase());
+        this.targetLang = properties.getProperty(langTo.toLowerCase());
     }
 
 

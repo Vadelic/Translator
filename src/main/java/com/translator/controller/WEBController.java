@@ -30,8 +30,8 @@ public class WEBController {
     }
 
     @RequestMapping("/addLang")
-    public Language addLanguage(@RequestParam(value = "lang") String lang) {
-        return langRepository.save(new Language(lang));
+    public Language addLanguage(@RequestParam(value = "lang") String lang, @RequestParam(value = "description") String description) {
+        return langRepository.save(new Language(lang, description));
     }
 
     @RequestMapping("/words")
