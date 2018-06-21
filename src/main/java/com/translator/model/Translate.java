@@ -44,7 +44,7 @@ public class Translate {
         this.id = id;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "word_id")
     public Word getWord() {
         return word;
@@ -63,7 +63,7 @@ public class Translate {
         this.translate = translate;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lang_id")
     public Language getLanguage() {
         return language;

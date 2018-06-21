@@ -30,7 +30,7 @@ public class Word {
     public Word() {
     }
 
-    @OneToMany(mappedBy = "word", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "word", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
     public List<UsageSentence> getSentences() {
         return sentences;
     }
@@ -39,7 +39,7 @@ public class Word {
         this.sentences = sentences;
     }
 
-    @OneToMany(mappedBy = "word", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "word", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     public List<Translate> getTranslates() {
         return translates;
     }

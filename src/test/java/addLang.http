@@ -1,0 +1,15 @@
+
+GET http://localhost:8080/addLang?lang=en&description=eng
+Accept: */*
+Cache-Control: no-cache
+
+### Get request with parameter
+GET http://localhost:8080/addLang?lang=ru&description=rus
+Accept: */*
+Cache-Control: no-cache
+
+###
+
+
+
+

@@ -5,6 +5,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "language")
 public class Language {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 
     private String code;
     private String description;
@@ -14,6 +17,8 @@ public class Language {
         this.description = description;
     }
 
+    public Language() {
+    }
 
     @Column(name = "description")
     public String getDescription() {
@@ -24,8 +29,7 @@ public class Language {
         this.description = description;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     @Column(name = "code")
     public String getCode() {
         return code;

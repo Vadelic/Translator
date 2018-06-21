@@ -8,8 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 public class TranslatorApplication {
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws ClassNotFoundException {
         SpringApplication.run(TranslatorApplication.class, args);
+
     }
 }

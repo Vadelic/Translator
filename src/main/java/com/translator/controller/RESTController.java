@@ -20,13 +20,17 @@ import java.util.List;
 
 @RestController
 public class RESTController {
-    @Autowired
-    private WordRepository wordRepository;
-    @Autowired
-    private LangRepository langRepository;
+    private final WordRepository wordRepository;
+    private final LangRepository langRepository;
 
-    @RequestMapping("/api/translete/{word}")
-    public Word greeting(@PathVariable String wordQuery, @RequestParam(value = "lang") String lang) throws TranslatorException {
+    @Autowired
+    public RESTController(WordRepository wordRepository, LangRepository langRepository) {
+        this.wordRepository = wordRepository;
+        this.langRepository = langRepository;
+    }
+
+    @RequestMapping("/api/translete")
+    public Word greeting(@RequestParam(value = "word") String wordQuery, @RequestParam(value = "lang") String lang) throws TranslatorException {
         Language wordLang = langRepository.findFirstByCode(lang.split("-")[0].toLowerCase().trim());
         Language languageTo = langRepository.findFirstByCode(lang.split("-")[1].toLowerCase().trim());
 

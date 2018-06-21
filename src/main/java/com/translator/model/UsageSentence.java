@@ -48,7 +48,7 @@ public class UsageSentence {
     }
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lang_id")
     public Language getLanguage() {
         return language;
