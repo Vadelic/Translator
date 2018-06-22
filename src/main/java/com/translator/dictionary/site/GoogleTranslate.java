@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class GoogleTranslate implements TranslateConfig {
     private final Logger log = Logger.getLogger(getClass());
 
-    private String KEY_API = "AIzaSyDQQA7BNS57D1Lw2lHD5jIOu5LryxnLi7E";
+    private String KEY_API;
 
     private String original;
     private String from;

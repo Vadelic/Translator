@@ -35,24 +35,18 @@ public class RESTController {
         Language languageTo = langRepository.findFirstByCode(lang.split("-")[1].toLowerCase().trim());
 
         Word word = getOrCreateWord(wordQuery, wordLang);
-
         translateWord(languageTo, word);
-
         fillPhoneme(word);
-
         fillUsages(languageTo, word);
         return word;
     }
 
-    private void fillUsages(Language languageTo, Word word) {
-        if (word.getUsagesForLang(languageTo).isEmpty()) {
-            DefaultUsagesGenerator usagesGenerator = new DefaultUsagesGenerator(word, languageTo);
-            List<UsageSentence> usages = usagesGenerator.getUsages();
-            if (!usages.isEmpty()) {
-                word.getSentences().addAll(usages);
-                wordRepository.save(word);
-            }
+    private Word getOrCreateWord(@PathVariable String wordQuery, Language wordLang) {
+        Word word = wordRepository.findWordByWordAndLanguageCode(wordQuery.toLowerCase().trim(), wordLang.getCode());
+        if (word == null) {
+            word = new Word(wordQuery, wordLang);
         }
+        return word;
     }
 
     private void fillPhoneme(Word word) {
@@ -79,11 +73,16 @@ public class RESTController {
         }
     }
 
-    private Word getOrCreateWord(@PathVariable String wordQuery, Language wordLang) {
-        Word word = wordRepository.findWordByWordAndLanguageCode(wordQuery.toLowerCase().trim(), wordLang.getCode());
-        if (word == null) {
-            word = new Word(wordQuery, wordLang);
+
+    private void fillUsages(Language languageTo, Word word) {
+        if (word.getUsagesForLang(languageTo).isEmpty()) {
+            DefaultUsagesGenerator usagesGenerator = new DefaultUsagesGenerator(word, languageTo);
+            List<UsageSentence> usages = usagesGenerator.getUsages();
+            if (!usages.isEmpty()) {
+                word.getSentences().addAll(usages);
+                wordRepository.save(word);
+            }
         }
-        return word;
     }
+
 }
