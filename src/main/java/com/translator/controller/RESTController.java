@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -38,7 +39,8 @@ public class RESTController {
         if (wordLang == null || languageTo == null) {
             Iterable<Language> all = langRepository.findAll();
             List<String> collect = StreamSupport.stream(all.spliterator(), false).map(Language::getCode).collect(Collectors.toList());
-            throw new TranslatorException("invalid lang. Available is: " + collect.toString());
+            if (collect==null) collect = new ArrayList<>();
+            throw new Exception("invalid lang. Available is: " + collect.toString());
         }
 
         Word word = getOrCreateWord(wordQuery, wordLang);
@@ -66,14 +68,14 @@ public class RESTController {
         }
     }
 
-    private void translateWord(Language languageTo, Word word) throws TranslatorException {
+    private void translateWord(Language languageTo, Word word) throws Exception {
         LanguagePack languagePack = word.getLanguagePack(languageTo);
         if (languagePack == null) {
             languagePack = new LanguagePack(languageTo);
 
             DefaultTranslateGenerator translateGenerator = new DefaultTranslateGenerator(word, languagePack);
             if (!translateGenerator.getTranslate()) {
-                throw new TranslatorException(String.format("No have translate for %s %s-%s" + word.getWord(), languageTo.getCode()));
+                throw new Exception(String.format("No have translate for %s (%s-%s)", word.getWord(), word.getLanguage().getCode(), languageTo.getCode()));
 
             } else {
                 word.getTranslatePacks().add(languagePack);
