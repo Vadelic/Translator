@@ -34,7 +34,7 @@ CREATE TABLE translator.translate (
   word_id          INT         NOT NULL,
   lang_id          INT         NOT NULL,
   translate        VARCHAR(45) NULL,
-  site_source      VARCHAR(50) NULL,
+  resource      VARCHAR(50) NULL,
   PRIMARY KEY (id),
 
   CONSTRAINT translate_word_id_lang_id_pk
@@ -55,7 +55,7 @@ CREATE TABLE translator.sentence (
   sentence_original  VARCHAR(300) NULL,
   lang_id            INT          NULL,
   sentence_translate VARCHAR(300) NULL,
-  site_source        VARCHAR(50)  NULL,
+  resource        VARCHAR(50)  NULL,
 
   PRIMARY KEY (id),
 

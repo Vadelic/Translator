@@ -9,44 +9,26 @@ import java.util.stream.Collectors;
  * Created by Komyshenets on 08.10.2017.
  */
 @Entity
-@Table(name = "words")
+@Table(name = "word")
 public class Word {
     private int id;
+    private Language language;
+    private String resource;
 
     private String word;
-    private Language language;
     private String subject;
     private String phoneme;
 
-    private List<Translate> translates = new ArrayList<>();
-    private List<UsageSentence> sentences = new ArrayList<>();
-    private List<TranslatePack> translatePacks = new ArrayList<>();
+    private List<LanguagePack> translatePacks = new ArrayList<>();
+
+    public Word() {
+    }
 
     public Word(String word, Language language) {
         this.word = word;
         this.language = language;
     }
 
-    public Word() {
-    }
-
-    @OneToMany(mappedBy = "word", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
-    public List<UsageSentence> getSentences() {
-        return sentences;
-    }
-
-    public void setSentences(List<UsageSentence> sentences) {
-        this.sentences = sentences;
-    }
-
-    @OneToMany(mappedBy = "word", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
-    public List<Translate> getTranslates() {
-        return translates;
-    }
-
-    public void setTranslates(List<Translate> translates) {
-        this.translates = translates;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -95,11 +77,21 @@ public class Word {
         this.phoneme = phoneme;
     }
 
-    public List<Translate> getTranslateForLang(Language language) {
-        return translates.stream().filter(tr -> tr.getLanguage().equals(language)).collect(Collectors.toList());
+    @JoinColumn(name = "resource")
+    public String getResource() {
+        return resource;
     }
 
-    public List<UsageSentence> getUsagesForLang(Language language) {
-        return sentences.stream().filter(st -> st.getLanguage().equals(language)).collect(Collectors.toList());
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+        public List<LanguagePack> getTranslatePacks() {
+        return translatePacks;
+    }
+
+    public void setTranslatePacks(List<LanguagePack> translatePacks) {
+        this.translatePacks = translatePacks;
     }
 }

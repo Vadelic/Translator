@@ -30,12 +30,15 @@ public class RESTController {
     }
 
     @RequestMapping("/api/translete")
-    public Word greeting(@RequestParam(value = "word") String wordQuery, @RequestParam(value = "lang") String lang) throws TranslatorException {
+    public Word greeting(@RequestParam(value = "word") String wordQuery, @RequestParam(value = "lang") String lang) throws Exception {
         Language wordLang = langRepository.findFirstByCode(lang.split("-")[0].toLowerCase().trim());
         Language languageTo = langRepository.findFirstByCode(lang.split("-")[1].toLowerCase().trim());
+        if (wordLang == null || languageTo == null)
+            throw new Exception("invalid lang");
 
         Word word = getOrCreateWord(wordQuery, wordLang);
         translateWord(languageTo, word);
+
         fillPhoneme(word);
         fillUsages(languageTo, word);
         return word;
@@ -61,28 +64,28 @@ public class RESTController {
     }
 
     private void translateWord(Language languageTo, Word word) throws TranslatorException {
-        if (word.getTranslateForLang(languageTo).isEmpty()) {
-            DefaultTranslateGenerator translateGenerator = new DefaultTranslateGenerator(word, languageTo);
-            Translate translate = translateGenerator.getTranslate();
-            if (translate == null) {
-                throw new TranslatorException(String.format("No have translate for %s %s-%s" + word.getWord(), languageTo.getCode()));
-            } else {
-                word.getTranslates().add(translate);
-                wordRepository.save(word);
-            }
-        }
+//        if (word.getTranslateForLang(languageTo).isEmpty()) {
+//            DefaultTranslateGenerator translateGenerator = new DefaultTranslateGenerator(word, languageTo);
+//            Translate translate = translateGenerator.getTranslate();
+//            if (translate == null) {
+//                throw new TranslatorException(String.format("No have translate for %s %s-%s" + word.getWord(), languageTo.getCode()));
+//            } else {
+//                word.getTranslates().add(translate);
+//                wordRepository.save(word);
+//            }
+//        }
     }
 
 
     private void fillUsages(Language languageTo, Word word) {
-        if (word.getUsagesForLang(languageTo).isEmpty()) {
-            DefaultUsagesGenerator usagesGenerator = new DefaultUsagesGenerator(word, languageTo);
-            List<UsageSentence> usages = usagesGenerator.getUsages();
-            if (!usages.isEmpty()) {
-                word.getSentences().addAll(usages);
-                wordRepository.save(word);
-            }
-        }
+//        if (word.getUsagesForLang(languageTo).isEmpty()) {
+//            DefaultUsagesGenerator usagesGenerator = new DefaultUsagesGenerator(word, languageTo);
+//            List<UsageSentence> usages = usagesGenerator.getUsages();
+//            if (!usages.isEmpty()) {
+//                word.getSentences().addAll(usages);
+//                wordRepository.save(word);
+//            }
+//        }
     }
 
 }

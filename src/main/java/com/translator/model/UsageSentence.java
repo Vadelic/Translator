@@ -11,15 +11,11 @@ import java.util.Map;
 public class UsageSentence {
     private int id;
 
-    private Word word;
-    private Language language;
     private String sentenceFrom;
     private String sentenceTo;
-    private String site_source;
+    private String resource;
 
-    public UsageSentence(Word word, Language language, String sentenceFrom, String sentenceTo) {
-        this.word = word;
-        this.language = language;
+    public UsageSentence(Language language, String sentenceFrom, String sentenceTo) {
         this.sentenceFrom = sentenceFrom;
         this.sentenceTo = sentenceTo;
     }
@@ -37,26 +33,6 @@ public class UsageSentence {
         this.id = id;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "word_id")
-    public Word getWord() {
-        return word;
-    }
-
-    public void setWord(Word word) {
-        this.word = word;
-    }
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lang_id")
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
 
     @Column(name = "sentence_original")
     public String getSentenceFrom() {
@@ -76,12 +52,12 @@ public class UsageSentence {
         this.sentenceTo = sentenceTo;
     }
 
-    public void setSite_source(String helper) {
-        this.site_source = helper;
+    @JoinColumn(name = "resource")
+    public String getResource() {
+        return resource;
     }
 
-    @Column(name = "site_source")
-    public String getSite_source() {
-        return site_source;
+    public void setResource(String resource) {
+        this.resource = resource;
     }
 }

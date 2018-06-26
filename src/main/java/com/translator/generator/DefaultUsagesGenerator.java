@@ -52,8 +52,8 @@ public class DefaultUsagesGenerator {
         List<UsageSentence> usageSentences = new ArrayList<>();
 
         for (Map.Entry<String, String> entry : usages.entrySet()) {
-            UsageSentence sentence = new UsageSentence(word, targetLang, entry.getKey(), entry.getValue());
-            sentence.setSite_source(siteSource);
+            UsageSentence sentence = new UsageSentence( targetLang, entry.getKey(), entry.getValue());
+            sentence.setResource(siteSource);
             usageSentences.add(sentence);
         }
         return usageSentences;

@@ -12,20 +12,11 @@ public class Language {
     private String code;
     private String description;
 
-    public Language(String lang, String description) {
-        this.code = lang;
-        this.description = description;
-    }
-
     public Language() {
     }
 
-    @Column(name = "description")
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
+    public Language(String lang, String description) {
+        this.code = lang;
         this.description = description;
     }
 
@@ -37,6 +28,15 @@ public class Language {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

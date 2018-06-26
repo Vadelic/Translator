@@ -5,16 +5,15 @@ import javax.persistence.*;
 /**
  * Created by Komyshenets on 08.10.2017.
  */
-@Entity
-@Table(name = "translate")
+//@Entity
+//@Table(name = "translate")
 public class Translate {
-
     private int id;
+    private Language language;
+    private String site_source;
 
     private Word word;
-    private Language language;
     private String translate;
-    private String site_source;
 
     public Translate(Word word, Language language, String translate) {
         this.word = word;
@@ -25,7 +24,7 @@ public class Translate {
     public Translate() {
     }
 
-    @Column(name = "site_source")
+//    @Column(name = "site_source")
     public String getSite_source() {
         return site_source;
     }
@@ -34,8 +33,8 @@ public class Translate {
         this.site_source = site_source;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -44,8 +43,8 @@ public class Translate {
         this.id = id;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "word_id")
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "word_id")
     public Word getWord() {
         return word;
     }
@@ -54,7 +53,7 @@ public class Translate {
         this.word = word;
     }
 
-    @Column(name = "translate")
+//    @Column(name = "translate")
     public String getTranslate() {
         return translate;
     }
@@ -63,8 +62,8 @@ public class Translate {
         this.translate = translate;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lang_id")
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "lang_id")
     public Language getLanguage() {
         return language;
     }
