@@ -1,6 +1,7 @@
 package com.translator.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,11 +12,17 @@ import java.util.List;
 public class LanguagePack {
     private int id;
     private Language language;
-//    private String word;
     private String translate;
-    private List<UsageSentence> sentences;
+    private List<UsageSentence> sentences = new ArrayList<>();
 
     private String resource;
+
+    public LanguagePack(Language languageTo) {
+        this.language = languageTo;
+    }
+
+    public LanguagePack() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,14 +44,6 @@ public class LanguagePack {
         this.language = language;
     }
 
-//    public String getWord() {
-//        return word;
-//    }
-//
-//    public void setWord(String word) {
-//        this.word = word;
-//    }
-
     @JoinColumn(name = "translate")
     public String getTranslate() {
         return translate;
@@ -54,7 +53,11 @@ public class LanguagePack {
         this.translate = translate;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+    @JoinTable(
+            name="PACK_SENTENCES_LINK",
+            joinColumns=@JoinColumn(name="LANGUAGE_PACK_ID", referencedColumnName="ID"),
+            inverseJoinColumns=@JoinColumn(name="SENTENCES_ID", referencedColumnName="ID"))
     public List<UsageSentence> getSentences() {
         return sentences;
     }

@@ -18,7 +18,7 @@ public class DefaultPhoneticGenerator {
     }
 
 
-    public String getPhonetic() {
+    public boolean getPhonetic() {
         Iterable<PhonemeConfig> configs = ConfigFactory.getConfigs(PhonemeConfig.class, word.getLanguage().getCode());
         for (PhonemeConfig config : configs) {
             try {
@@ -28,12 +28,14 @@ public class DefaultPhoneticGenerator {
                 String phoneme = config.getPhoneme();
                 log.debug(String.format("Parse and result: %s (%s)", config.getAddress(), phoneme));
                 if (phoneme != null) {
-                    return phoneme;
+                    word.setPhoneme(phoneme);
+                    word.setResource(config.getAddress());
+                    return true;
                 }
             } catch (DictionaryConfigException e) {
                 log.warn(String.format("Error while parsing phoneme: %s", config.getAddress()), e);
             }
         }
-        return null;
+        return false;
     }
 }

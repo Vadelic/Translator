@@ -42,8 +42,8 @@ public class DefaultPhoneticGeneratorTest {
             System.out.println("test: " + word);
 
             DefaultPhoneticGenerator defaultWordGenerator = new DefaultPhoneticGenerator(word);
-            String phonetic = defaultWordGenerator.getPhonetic();
-            Assert.assertEquals(phonetic, result);
+            defaultWordGenerator.getPhonetic();
+            Assert.assertEquals(word.getPhoneme(), result);
         }
     }
 }

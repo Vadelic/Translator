@@ -2,8 +2,7 @@ package com.translator.generator;
 
 import com.translator.dictionary.ConfigFactory;
 import com.translator.dictionary.TranslateConfig;
-import com.translator.model.Language;
-import com.translator.model.Translate;
+import com.translator.model.LanguagePack;
 import com.translator.model.Word;
 import org.apache.log4j.Logger;
 
@@ -13,35 +12,35 @@ import org.apache.log4j.Logger;
 public class DefaultTranslateGenerator {
     private final Logger log = Logger.getLogger(getClass());
     private Word word;
-    private Language languageTo;
+    private LanguagePack languagePack;
 
 
-    public DefaultTranslateGenerator(Word wordOriginal, Language languageTo) {
+    public DefaultTranslateGenerator(Word wordOriginal, LanguagePack languagePack) {
         this.word = wordOriginal;
-        this.languageTo = languageTo;
+        this.languagePack = languagePack;
     }
 
 
-    public Translate getTranslate() {
+    public boolean getTranslate() {
         Iterable<TranslateConfig> configs = ConfigFactory.getConfigs(TranslateConfig.class, word.getLanguage().getCode());
         for (TranslateConfig config : configs) {
             try {
                 config.setWord(word.getWord());
                 config.setLangFrom(word.getLanguage().getCode());
-                config.setLangTo(languageTo.getCode());
+                config.setLangTo(languagePack.getLanguage().getCode());
                 String parseResult = config.getTranslate();
 
                 log.debug(String.format("Parse and result: %s (%s)", config.getAddress(), parseResult));
                 if (parseResult != null) {
-                    Translate translate = new Translate(word, languageTo, parseResult);
-                    translate.setSite_source(config.getAddress());
-                    return translate;
+                    languagePack.setTranslate(parseResult);
+                    languagePack.setResource(config.getAddress());
+                    return true;
                 }
             } catch (Exception e) {
                 log.warn(String.format("Error while parsing translate: %s", config.getAddress()), e);
             }
         }
 
-        return null;
+        return false;
     }
 }

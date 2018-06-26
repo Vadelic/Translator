@@ -19,7 +19,7 @@ import java.util.Properties;
  */
 public class ContextReversoNet implements UsagesConfig {
     private final Logger log = Logger.getLogger(getClass());
-
+    private final int MAX_USAGE_LENGTH = 40;
     private String word = null;
     private String wordLang = null;
     private String targetLang = null;;
@@ -84,7 +84,7 @@ public class ContextReversoNet implements UsagesConfig {
         Map<String, String> map = new HashMap<>();
         String original = ((HtmlSpan) div.getFirstByXPath("div[@class='src ltr']/span[@class='text']")).asText();
         String translate = ((HtmlSpan) div.getFirstByXPath("div[@class='trg ltr']/span[@class='text']")).asText();
-        if (original.length() <= 300 && translate.length() <= 300)
+        if (original.length() <= MAX_USAGE_LENGTH && translate.length() <= MAX_USAGE_LENGTH)
             map.put(original, translate);
         return map;
     }

@@ -2,6 +2,7 @@ package com.translator.model;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,12 +87,25 @@ public class Word {
         this.resource = resource;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
-        public List<LanguagePack> getTranslatePacks() {
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+    @JoinTable(
+            name="WORD_TRANSLATE_PACKS_LINK",
+            joinColumns=@JoinColumn(name="WORD_ID", referencedColumnName="ID"),
+            inverseJoinColumns=@JoinColumn(name="TRANSLATE_PACKS_ID", referencedColumnName="ID"))
+    public List<LanguagePack> getTranslatePacks() {
         return translatePacks;
     }
 
     public void setTranslatePacks(List<LanguagePack> translatePacks) {
         this.translatePacks = translatePacks;
+    }
+
+    public LanguagePack getLanguagePack(Language languageTo) {
+        for (LanguagePack translatePack : translatePacks) {
+            if (translatePack.getLanguage().equals(languageTo)) {
+                return translatePack;
+            }
+        }
+        return null;
     }
 }

@@ -1,7 +1,7 @@
 package com.translator.generator;
 
 import com.translator.model.Language;
-import com.translator.model.Translate;
+import com.translator.model.LanguagePack;
 import com.translator.model.Word;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,13 +31,14 @@ public class DefaultTranslateGeneratorTest {
 
         for (Map.Entry<String, String> entry : translates.entrySet()) {
             Language languageTo = new Language(entry.getKey(), entry.getKey());
+            LanguagePack languagePack = new LanguagePack(languageTo);
             String result = entry.getValue();
 
-            DefaultTranslateGenerator defaultTranslateGenerator = new DefaultTranslateGenerator(word, languageTo);
-            Translate translate = defaultTranslateGenerator.getTranslate();
+            DefaultTranslateGenerator defaultTranslateGenerator = new DefaultTranslateGenerator(word, languagePack);
+            defaultTranslateGenerator.getTranslate();
 
 
-            Assert.assertEquals(translate.getTranslate(), result);
+            Assert.assertEquals(languagePack.getTranslate(), result);
         }
 
     }

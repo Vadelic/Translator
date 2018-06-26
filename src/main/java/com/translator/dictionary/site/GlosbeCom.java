@@ -11,7 +11,7 @@ import java.util.*;
  * Created by Komyshenets on 12/7/2017.
  */
 public class GlosbeCom implements TranslateConfig, UsagesConfig {
-    private final int MAX_USAGE_LENGTH = 300;
+    private final int MAX_USAGE_LENGTH = 40;
     private String word = null;
     private String wordLang = null;
     private String targetLang = null;
