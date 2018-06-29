@@ -1,14 +1,12 @@
 package com.translator.controller;
 
-import com.translator.exception.TranslatorException;
 import com.translator.generator.DefaultPhoneticGenerator;
-import com.translator.generator.DefaultTranslateGenerator;
-import com.translator.generator.DefaultUsagesGenerator;
+import com.translator.generator.LanguagePackCreator;
 import com.translator.model.Language;
 import com.translator.model.LanguagePack;
-import com.translator.model.UsageSentence;
 import com.translator.model.Word;
 import com.translator.repository.LangRepository;
+import com.translator.repository.PackRepository;
 import com.translator.repository.WordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,11 +23,14 @@ import java.util.stream.StreamSupport;
 public class RESTController {
     private final WordRepository wordRepository;
     private final LangRepository langRepository;
+    private final PackRepository packRepository;
+    ;
 
     @Autowired
-    public RESTController(WordRepository wordRepository, LangRepository langRepository) {
+    public RESTController(WordRepository wordRepository, LangRepository langRepository, PackRepository packRepository) {
         this.wordRepository = wordRepository;
         this.langRepository = langRepository;
+        this.packRepository = packRepository;
     }
 
     @RequestMapping("/api/translete")
@@ -39,15 +40,25 @@ public class RESTController {
         if (wordLang == null || languageTo == null) {
             Iterable<Language> all = langRepository.findAll();
             List<String> collect = StreamSupport.stream(all.spliterator(), false).map(Language::getCode).collect(Collectors.toList());
-            if (collect==null) collect = new ArrayList<>();
+            if (collect == null) collect = new ArrayList<>();
             throw new Exception("invalid lang. Available is: " + collect.toString());
         }
 
         Word word = getOrCreateWord(wordQuery, wordLang);
-        translateWord(languageTo, word);
 
-        fillPhoneme(word);
-        fillUsages(languageTo, word);
+
+        boolean needToSave;
+        LanguagePack languagePack = word.getLanguagePack(languageTo);
+        if (languagePack == null) {
+            languagePack = new LanguagePackCreator().createAndFill(word, languageTo);
+            packRepository.save(languagePack);
+            word.addLanguagePack(languagePack);
+            needToSave = true;
+        } else {
+            needToSave = new LanguagePackCreator().fill(word, languagePack);
+        }
+        if (needToSave) wordRepository.save(word);
+
         return word;
     }
 
@@ -56,6 +67,10 @@ public class RESTController {
         if (word == null) {
             word = new Word(wordQuery, wordLang);
         }
+        if (word.getPhoneme() == null) {
+            fillPhoneme(word);
+            wordRepository.save(word);
+        }
         return word;
     }
 
@@ -63,41 +78,8 @@ public class RESTController {
         if (word.getPhoneme() == null) {
             DefaultPhoneticGenerator phoneticGenerator = new DefaultPhoneticGenerator(word);
             if (phoneticGenerator.getPhonetic()) {
-                wordRepository.save(word);
             }
         }
     }
 
-    private void translateWord(Language languageTo, Word word) throws Exception {
-        LanguagePack languagePack = word.getLanguagePack(languageTo);
-        if (languagePack == null) {
-            languagePack = new LanguagePack(languageTo);
-
-            DefaultTranslateGenerator translateGenerator = new DefaultTranslateGenerator(word, languagePack);
-            if (!translateGenerator.getTranslate()) {
-                throw new Exception(String.format("No have translate for %s (%s-%s)", word.getWord(), word.getLanguage().getCode(), languageTo.getCode()));
-
-            } else {
-                word.getTranslatePacks().add(languagePack);
-                wordRepository.save(word);
-            }
-        }
-    }
-
-
-    private void fillUsages(Language languageTo, Word word) {
-        LanguagePack languagePack = word.getLanguagePack(languageTo);
-        if (languagePack == null)
-            languagePack = new LanguagePack(languageTo);
-
-
-        if (languagePack.getSentences().isEmpty()) {
-            DefaultUsagesGenerator usagesGenerator = new DefaultUsagesGenerator(word, languageTo);
-            List<UsageSentence> usages = usagesGenerator.getUsages();
-            if (!usages.isEmpty()) {
-                languagePack.getSentences().addAll(usages);
-                wordRepository.save(word);
-            }
-        }
-    }
 }

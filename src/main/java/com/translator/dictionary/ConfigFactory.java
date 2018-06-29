@@ -43,7 +43,7 @@ public class ConfigFactory {
                     Object newInstanceConfig = Class.forName(aClass.trim()).getDeclaredConstructor().newInstance();
                     result.add((T) newInstanceConfig);
                 } catch (Throwable e) {
-                    log.warn(String.format("Can't create instance %s", aClass.trim()), e);
+                    log.warn(String.format("Can't createAndFill instance %s", aClass.trim()), e);
                 }
             }
         }

@@ -1,0 +1,3 @@
+INSERT INTO PUBLIC.WORD (ID, PHONEME, RESOURCE, SUBJECT, WORD, LANG_ID) VALUES (33, 'wəːd', 'https://en.oxforddictionaries.com/definition/word', null, 'word', 4);
+INSERT INTO PUBLIC.WORD (ID, PHONEME, RESOURCE, SUBJECT, WORD, LANG_ID) VALUES (65, 'ˈwɔːtə', 'https://en.oxforddictionaries.com/definition/water', null, 'water', 4);
+INSERT INTO PUBLIC.WORD (ID, PHONEME, RESOURCE, SUBJECT, WORD, LANG_ID) VALUES (97, 'kaʃ', 'https://en.oxforddictionaries.com/definition/wordaccept: */*cache-control: no-cache', null, 'wordAccept: */*Cache-Control: no-cache', 4);

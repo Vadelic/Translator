@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -65,6 +66,7 @@ public class Word {
         return subject;
     }
 
+
     public void setSubject(String description) {
         this.subject = description;
     }
@@ -89,9 +91,9 @@ public class Word {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
     @JoinTable(
-            name="WORD_TRANSLATE_PACKS_LINK",
-            joinColumns=@JoinColumn(name="WORD_ID", referencedColumnName="ID"),
-            inverseJoinColumns=@JoinColumn(name="TRANSLATE_PACKS_ID", referencedColumnName="ID"))
+            name = "WORD_TRANSLATE_PACKS_LINK",
+            joinColumns = @JoinColumn(name = "WORD_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "TRANSLATE_PACKS_ID", referencedColumnName = "ID"))
     public List<LanguagePack> getTranslatePacks() {
         return translatePacks;
     }
@@ -102,10 +104,14 @@ public class Word {
 
     public LanguagePack getLanguagePack(Language languageTo) {
         for (LanguagePack translatePack : translatePacks) {
-            if (translatePack.getLanguage().equals(languageTo)) {
+            if (Objects.equals(translatePack.getLanguage(), languageTo)) {
                 return translatePack;
             }
         }
         return null;
+    }
+
+    public void addLanguagePack(LanguagePack languagePack) {
+            translatePacks.add(languagePack);
     }
 }

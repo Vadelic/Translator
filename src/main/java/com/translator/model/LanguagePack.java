@@ -34,7 +34,7 @@ public class LanguagePack {
         this.id = id;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lang_id")
     public Language getLanguage() {
         return language;
