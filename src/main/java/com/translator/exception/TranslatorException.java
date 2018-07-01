@@ -5,6 +5,6 @@ package com.translator.exception;
  */
 public class TranslatorException extends Exception {
     public TranslatorException(String format) {
-        super();
+        super(format);
     }
 }

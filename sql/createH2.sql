@@ -1,5 +1,6 @@
-CREATE SCHEMA translator
+CREATE SCHEMA translatorDB
   DEFAULT CHARACTER SET utf8;
+
 
 create table LANGUAGE (
   ID          INTEGER not null primary key AUTO_INCREMENT,
@@ -18,7 +19,7 @@ create table WORD (
   RESOURCE VARCHAR(255),
   SUBJECT  VARCHAR(255),
   WORD     VARCHAR(255),
-  LANG_ID  INTEGER CONSTRAINT word_lang_id_fk REFERENCES language (id)
+  LANG_ID  INTEGER  CONSTRAINT word_lang_id_fk  REFERENCES language (id)
 
 );
 
@@ -26,7 +27,8 @@ create table LANGUAGE_PACK (
   ID        INTEGER not null primary key AUTO_INCREMENT,
   RESOURCE  VARCHAR(255),
   TRANSLATE VARCHAR(255),
-  LANG_ID   INTEGER CONSTRAINT pack_lang_id_fk REFERENCES language (id)
+  LANG_ID   INTEGER
+  CONSTRAINT pack_lang_id_fk REFERENCES language (id)
 );
 
 create table SENTENCE (
