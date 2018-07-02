@@ -19,6 +19,7 @@
 <script src="js/translatorApp.js"></script>
 <script src="js/frontCtrl.js"></script>
 <script src="js/directWordDescription.js"></script>
+<script src="js/directTranslateDescription.js"></script>
 
 <head>
     <meta charset="UTF-8">
@@ -26,9 +27,9 @@
 </head>
 <body>
 
-<div ng-app="translatorApp" ng-controller="myCtrl">
+<div ng-app="translatorApp">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="#">Translator by Lexicon</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -64,9 +65,10 @@
             </form>
         </div>
     </nav>
-    <div class="container-fluid">
+
+    <div ng-controller="navigateWords" class="container-fluid">
         <div class="row">
-            <div class="col-3 mt-3">
+            <div class="col-2 mt-3">
 
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
@@ -77,18 +79,38 @@
                     </select>
                 </div>
 
+                <!--<div class="input-group mb-3">-->
+                <input ng-model="searchField" type="text" class="form-control" placeholder="Search word..."
+                       aria-describedby="basic-addon2">
+                <!--<div class="input-group-append">-->
+                <!--<button ng-click="addItem()" class="btn btn-outline-secondary" type="button">+</button>-->
+                <!--</div>-->
+                <!--</div>-->
 
-                <div>
-                    <div class="list-group" id="list-tab" role="tablist">
+                <div class="list-group" id="list-tab" role="tablist">
 
-                        <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list"
-                           href="#list-{{$index}}" ng-click="selectWord({word: 'word5555'})" role="tab" aria-controls="settings"
-                           ng-repeat="word in words">{{word}}</a>
-                    </div>
+                    <a class="list-group-item list-group-item-action" data-toggle="list" role="tab"
+                       aria-controls="settings"
+                       ng-click="selectWord(word)" ng-repeat="word in words | filter : searchField">{{word}}</a>
                 </div>
             </div>
-            <div class="col-9">
-                <word-description word-w="selectedWord" lang-l="selectedLang.code"></word-description>
+            <div class="col-10">
+
+                <h1>{{selectedWord.word}} <span class="phoneme">{{selectedWord.phoneme}}</span></h1>
+                <div class="form-group col-md-6">
+                    <label for="subjectForm">Subject</label>
+                    <input type="text" class="form-control" id="subjectForm" ng-model="selectedWord.subject">
+                </div>
+                <hr>
+                  <span class="badge badge-pill badge-success"
+                  ng-repeat="lang in unFilledPack">{{lang.description}}</span>
+                <hr>
+
+
+                <translate-description ng-repeat="pack in selectedWord.translatePacks"
+                                       pack="pack">
+                </translate-description>
+
             </div>
         </div>
     </div>

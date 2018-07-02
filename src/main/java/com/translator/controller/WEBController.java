@@ -52,7 +52,7 @@ public class WEBController {
     }
 
 
-    @RequestMapping("/translate")
+    @RequestMapping("/wordItem")
     public Word getWordsTranslate(@RequestParam(value = "word") String word, @RequestParam(value = "lang") String lang) {
         return wordRepository.findWordByWordAndLanguageCode(word, lang);
     }

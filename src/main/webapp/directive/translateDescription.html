@@ -1,0 +1,22 @@
+<div style="border: 1px black solid">
+    <h4>{{translateD.language.description}}</h4>
+    <form>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="phonemeForm" ng-model="translateD.translate">
+                <a href="{{translateD.resource}}" class="badge badge-light">{{translateD.resource}}</a>
+            </div>
+        </div>
+
+        <table class="table table-sm">
+            <tbody>
+            <tr ng-repeat="sent in translateD.sentences">
+                <td>{{sent.sentenceFrom}}</td>
+                <td>{{sent.sentenceTo}}</td>
+                <td><a href="{{sent.resource}}" class="badge badge-light">link</a></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </form>
+</div>

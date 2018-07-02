@@ -1,4 +1,4 @@
-angular.module('directWordDescription', []);
+var wordDesc = angular.module('wordDescription', []);
 
-var app = angular.module('translatorApp', ['directWordDescription']);
+var app = angular.module('translatorApp', ['wordDescription']);
 

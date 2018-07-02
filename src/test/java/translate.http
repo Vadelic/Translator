@@ -34,3 +34,10 @@ Cache-Control: no-cache
 <> 2018-06-21T053535.200.json
 
 ###
+GET http://localhost:8080/wordItem?lang=en&word=word
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-06-21T053535.200.json
+
+###
