@@ -27,83 +27,62 @@
 </head>
 <body>
 
-<div ng-app="translatorApp">
+<div ng-app="translatorApp" ng-controller="navigateWords">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Translator by Lexicon</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button"
+                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{selectedLang==null?'Choose language':selectedLang.description}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Disabled</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+                <a class="dropdown-item" ng-repeat="x in availableLangs" ng-click="selectLang(x)">
+                    {{x.description}}</a>
+            </div>
         </div>
     </nav>
 
-    <div ng-controller="navigateWords" class="container-fluid">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-2 mt-3">
 
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect01">Choose language</label>
+                <div ng-if="selectedLang">
+                    <div class="input-group mb-3">
+                        <input ng-model="searchField" type="text" class="form-control" placeholder="Search word..."
+                               aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button ng-click="addItem(searchField, selectedLang.code)" class="btn btn-outline-secondary" type="button">+</button>
+                        </div>
                     </div>
-                    <select class="custom-select" id="inputGroupSelect01" ng-model="selectedLang"
-                            ng-options="x.description for x in availableLangs">
-                    </select>
-                </div>
 
-                <!--<div class="input-group mb-3">-->
-                <input ng-model="searchField" type="text" class="form-control" placeholder="Search word..."
-                       aria-describedby="basic-addon2">
-                <!--<div class="input-group-append">-->
-                <!--<button ng-click="addItem()" class="btn btn-outline-secondary" type="button">+</button>-->
-                <!--</div>-->
-                <!--</div>-->
-
-                <div class="list-group" id="list-tab" role="tablist">
-
-                    <a class="list-group-item list-group-item-action" data-toggle="list" role="tab"
-                       aria-controls="settings"
-                       ng-click="selectWord(word)" ng-repeat="word in words | filter : searchField">{{word}}</a>
+                    <div class="list-group" id="list-tab" role="tablist">
+                        <a class="list-group-item list-group-item-action" data-toggle="list" role="tab"
+                           aria-controls="settings"
+                           ng-click="selectWord(word)" ng-repeat="word in words | filter : searchField">{{word}}</a>
+                    </div>
                 </div>
             </div>
-            <div class="col-10">
 
-                <h1>{{selectedWord.word}} <span class="phoneme">{{selectedWord.phoneme}}</span></h1>
+            <div class="col-10" ng-if="selectedWord">
+
+                <div>
+                    <h1>{{selectedWord.word}}</h1>
+                    <span class="phoneme">{{selectedWord.phoneme}}</span>
+                    <button type="button" ng-click="editWord(selectedWord)">edit</button>
+                </div>
                 <div class="form-group col-md-6">
                     <label for="subjectForm">Subject</label>
                     <input type="text" class="form-control" id="subjectForm" ng-model="selectedWord.subject">
                 </div>
                 <hr>
-                  <span class="badge badge-pill badge-success"
-                  ng-repeat="lang in unFilledPack">{{lang.description}}</span>
+                <button type="button" class="btn btn-outline-success" ng-click="addPack(selectedWord, lang)"
+                        ng-repeat="lang in unFilledPack">{{lang.description}}
+                </button>
                 <hr>
 
 

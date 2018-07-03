@@ -1,6 +1,11 @@
 package com.translator.controller;
 
+import com.translator.exception.TranslatorException;
+import com.translator.generator.DefaultPhoneticGenerator;
+import com.translator.generator.LanguagePackCreator;
+import com.translator.model.LanguagePack;
 import com.translator.repository.LangRepository;
+import com.translator.repository.PackRepository;
 import com.translator.repository.WordRepository;
 import com.translator.model.Language;
 import com.translator.model.Word;
@@ -18,20 +23,21 @@ import java.util.stream.Collectors;
 
 @RestController
 public class WEBController {
+    private final LangRepository langRepository;
+    private final WordRepository wordRepository;
+    private final PackRepository packRepository;
+
     @Autowired
-    private LangRepository langRepository;
-    @Autowired
-    private WordRepository wordRepository;
+    public WEBController(LangRepository langRepository, WordRepository wordRepository, PackRepository packRepository) {
+        this.wordRepository = wordRepository;
+        this.packRepository = packRepository;
+        this.langRepository = langRepository;
+    }
 
 
     @RequestMapping("/availableLangs")
     public Iterable<Language> getLanguages() {
         return langRepository.findAll();
-    }
-
-    @RequestMapping("/addLang")
-    public Language addLanguage(@RequestParam(value = "lang") String lang, @RequestParam(value = "description") String description) {
-        return langRepository.save(new Language(lang, description));
     }
 
     @RequestMapping("/words")
@@ -40,21 +46,44 @@ public class WEBController {
         return words.stream().map(Word::getWord).collect(Collectors.toList());
     }
 
-    @RequestMapping("/addWord")
-    public boolean addWord(@RequestParam(value = "word") String word, @RequestParam(value = "lang") String lang) {
-
-        Word wordObj = new Word();
-        Language language = langRepository.findFirstByCode(lang);
-        wordObj.setLanguage(language);
-        wordObj.setWord(word);
-        wordObj = wordRepository.save(wordObj);
-        return true;
+    @RequestMapping("/wordItem")
+    public Word getWordsTranslate(@RequestParam(value = "word") String word, @RequestParam(value = "lang") String lang) {
+        Word wordObj = wordRepository.findWordByWordAndLanguageCode(word, lang);
+        if (wordObj.getPhoneme() == null) {
+            DefaultPhoneticGenerator phoneticGenerator = new DefaultPhoneticGenerator(wordObj);
+            if (phoneticGenerator.getPhonetic())
+                wordRepository.save(wordObj);
+        }
+        return wordObj;
     }
 
 
-    @RequestMapping("/wordItem")
-    public Word getWordsTranslate(@RequestParam(value = "word") String word, @RequestParam(value = "lang") String lang) {
-        return wordRepository.findWordByWordAndLanguageCode(word, lang);
+    @RequestMapping("/addPack")
+    public LanguagePack addPack(@RequestParam(value = "wordId") Integer wordId, @RequestParam(value = "lang") String lang) throws TranslatorException {
+
+        Language language = langRepository.findFirstByCode(lang);
+        Word word = wordRepository.findById(wordId);
+        if (word.getLanguagePack(language)!=null){
+            throw new TranslatorException("this translate pack is exist");
+        }
+
+        LanguagePack pack = new LanguagePackCreator().createAndFill(word, language);
+        pack = packRepository.save(pack);
+        word.addLanguagePack(pack);
+        wordRepository.save(word);
+        return pack;
+    }
+
+
+    @RequestMapping("/addLang")
+    public Language addLanguage(@RequestParam(value = "lang") String lang, @RequestParam(value = "description") String description) {
+        return langRepository.save(new Language(lang, description));
+    }
+
+    @RequestMapping("/addWord")
+    public Word addWord(@RequestParam(value = "word") String word, @RequestParam(value = "lang") String lang) {
+        Word wordObj = new Word(word.toLowerCase(), langRepository.findFirstByCode(lang));
+        return wordRepository.save(wordObj);
     }
 
 

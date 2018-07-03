@@ -41,7 +41,7 @@ public class LanguagePackCreator {
         }
 
         if (languagePack.getSentences().isEmpty()) {
-            changed = fillSentences(languagePack, word);
+            changed = fillSentences(languagePack, word)|| changed;
         }
 
         return changed;
