@@ -1,10 +1,9 @@
 <div style="border: 1px gray     solid">
     <h4>{{translateD.language.description}}</h4>
-    <form>
         <div class="form-row">
             <div class="form-group col-md-6">
-                <input type="text" class="form-control" id="phonemeForm" ng-model="translateD.translate">
-                <a href="{{translateD.resource}}" class="badge badge-light">{{translateD.resource}}</a>
+                <span type="text" class="form-control"  >{{translateD.translate}}</span>
+
             </div>
         </div>
 
@@ -17,5 +16,39 @@
             </tr>
             </tbody>
         </table>
-    </form>
+</div>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{translateD.language.code}}" ng-click="edit(translateD)">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="{{translateD.language.code}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" id="phonemeForm" ng-model="temp.translate">
+                <table class="table table-sm">
+                    <tbody>
+                    <tr ng-repeat="x in temp.sentences">
+
+                       <td> <input type="text" ng-model="x.sentenceFrom"></td>
+                        <td><input type="text" ng-model="x.sentenceTo"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="savePack(temp)">Save changes</button>
+            </div>
+        </div>
+    </div>
 </div>

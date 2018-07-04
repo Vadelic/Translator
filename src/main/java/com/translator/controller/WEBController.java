@@ -3,13 +3,14 @@ package com.translator.controller;
 import com.translator.exception.TranslatorException;
 import com.translator.generator.DefaultPhoneticGenerator;
 import com.translator.generator.LanguagePackCreator;
+import com.translator.model.Language;
 import com.translator.model.LanguagePack;
+import com.translator.model.Word;
 import com.translator.repository.LangRepository;
 import com.translator.repository.PackRepository;
 import com.translator.repository.WordRepository;
-import com.translator.model.Language;
-import com.translator.model.Word;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -86,5 +87,8 @@ public class WEBController {
         return wordRepository.save(wordObj);
     }
 
-
+    @RequestMapping("/saveTranslatePack")
+    public LanguagePack saveTranslatePack(@RequestBody LanguagePack pack) {
+        return packRepository.save(pack);
+    }
 }

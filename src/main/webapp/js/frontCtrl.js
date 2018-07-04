@@ -75,5 +75,7 @@ app.controller('navigateWords', function ($scope, $http) {
         ;
     };
 
+
+
 });
 

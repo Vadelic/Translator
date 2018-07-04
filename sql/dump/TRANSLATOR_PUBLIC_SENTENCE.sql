@@ -1,7 +1,0 @@
-INSERT INTO PUBLIC.SENTENCE (ID, RESOURCE, SENTENCE_ORIGINAL, SENTENCE_TRANSLATE) VALUES (1, 'http://context.reverso.net/translation/english-russian/word', 'My word is still my word.', 'Моё слово по прежнему в силе.');
-INSERT INTO PUBLIC.SENTENCE (ID, RESOURCE, SENTENCE_ORIGINAL, SENTENCE_TRANSLATE) VALUES (2, 'https://glosbe.com/en/ru/word', 'It''s word salad.', 'Этакий словесный винегрет.');
-INSERT INTO PUBLIC.SENTENCE (ID, RESOURCE, SENTENCE_ORIGINAL, SENTENCE_TRANSLATE) VALUES (3, 'https://glosbe.com/en/ru/word', 'They''re words from the market.', 'Так говорят на рынке.');
-INSERT INTO PUBLIC.SENTENCE (ID, RESOURCE, SENTENCE_ORIGINAL, SENTENCE_TRANSLATE) VALUES (4, 'https://glosbe.com/en/ru/word', 'Words are not enough, Will.', 'Словами тут ничего не скажешь, Уилл.');
-INSERT INTO PUBLIC.SENTENCE (ID, RESOURCE, SENTENCE_ORIGINAL, SENTENCE_TRANSLATE) VALUES (5, 'https://glosbe.com/en/ru/word', 'It''s not the right word.', 'Это не то слово.');
-INSERT INTO PUBLIC.SENTENCE (ID, RESOURCE, SENTENCE_ORIGINAL, SENTENCE_TRANSLATE) VALUES (33, 'https://glosbe.com/en/ru/water', 'The water reached my knees.', 'Вода дошла мне до колен.');
-INSERT INTO PUBLIC.SENTENCE (ID, RESOURCE, SENTENCE_ORIGINAL, SENTENCE_TRANSLATE) VALUES (34, 'https://glosbe.com/en/ru/water', 'Almost done with the water tower.', 'Почти закончил с водонапорной башней.');
