@@ -1,30 +1,30 @@
-<div style="border: 1px gray     solid">
-    <h4>{{translateD.language.description}}</h4>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <span type="text" class="form-control"  >{{translateD.translate}}</span>
+<div style="border: 1px gray solid; width: 50%">
+    <h4>{{translateD.language.description}}
+        <button class="btn" data-toggle="modal" data-target="#{{translateD.language.code}}" ng-click="edit(translateD)">
+            <span class="fa fa-pencil"></span></button>
+    </h4>
 
-            </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <h6> {{translateD.translate}}</h6>
         </div>
+    </div>
 
-        <table class="table table-sm">
-            <tbody>
-            <tr ng-repeat="sent in translateD.sentences">
-                <td>{{sent.sentenceFrom}}</td>
-                <td>{{sent.sentenceTo}}</td>
-                <td><a href="{{sent.resource}}" class="badge badge-light">link</a></td>
-            </tr>
-            </tbody>
-        </table>
+    <table class="table table-sm">
+        <tbody>
+        <tr ng-repeat="sent in translateD.sentences">
+            <td>{{sent.sentenceFrom}}</td>
+            <td>{{sent.sentenceTo}}</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{translateD.language.code}}" ng-click="edit(translateD)">
-    Launch demo modal
-</button>
 
 <!-- Modal -->
-<div class="modal fade" id="{{translateD.language.code}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="{{translateD.language.code}}" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -34,20 +34,29 @@
                 </button>
             </div>
             <div class="modal-body">
-                <input type="text" class="form-control" id="phonemeForm" ng-model="temp.translate">
+                <input type="text" class="form-control" ng-model="temp.translate">
                 <table class="table table-sm">
                     <tbody>
                     <tr ng-repeat="x in temp.sentences">
 
-                       <td> <input type="text" ng-model="x.sentenceFrom"></td>
+                        <td><input type="text" ng-model="x.sentenceFrom"></td>
                         <td><input type="text" ng-model="x.sentenceTo"></td>
+                        <td><a class="btn btn-danger" ng-click="removeSentence($index)"><span
+                                class="fa fa-remove"></span></a></td>
                     </tr>
+                    <tr>
+                        <td><input type="text" ng-model="tempSentenceFrom"></td>
+                        <td><input type="text" ng-model="tempSentenceTo"></td>
+                        <td><a class="btn btn-success" ng-click="addSentence()"><span class="fa fa-plus"></span></a>
+                        </td>
+                    </tr>
+
                     </tbody>
                 </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="savePack(temp)">Save changes</button>
+                <button type="button" class="btn btn-primary" ng-click="savePack(temp)">Save</button>
             </div>
         </div>
     </div>

@@ -13,5 +13,5 @@ public interface WordRepository extends CrudRepository<Word, Long> {
 
     Word findWordByWordAndLanguageCode(String word, String language_code);
 
-    Word findById(int id);
+    Word findWordById(Long id);
 }

@@ -8,14 +8,13 @@ import java.util.Map;
  */
 @Entity
 @Table(name = "sentence")
-public class UsageSentence {
-    private int id;
+public class UsageSentence  extends JPA {
 
     private String sentenceFrom;
     private String sentenceTo;
     private String resource;
 
-    public UsageSentence(Language language, String sentenceFrom, String sentenceTo) {
+    public UsageSentence(String sentenceFrom, String sentenceTo) {
         this.sentenceFrom = sentenceFrom;
         this.sentenceTo = sentenceTo;
     }
@@ -23,15 +22,6 @@ public class UsageSentence {
     public UsageSentence() {
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
 
     @Column(name = "sentence_original")

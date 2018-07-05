@@ -4,10 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "language")
-public class Language {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+public class Language extends JPA {
 
     private String code;
     private String description;
@@ -19,7 +16,6 @@ public class Language {
         this.code = lang;
         this.description = description;
     }
-
 
     @Column(name = "code")
     public String getCode() {
@@ -48,9 +44,7 @@ public class Language {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Language)) return false;
-
         Language language = (Language) o;
-
         return code.equals(language.code);
     }
 

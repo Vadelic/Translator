@@ -15,6 +15,15 @@ function getUnfilledPack(packs, availableLangs, wordCode) {
     return unFilledLangs;
 }
 
+function blockScreen() {
+    $('#pleaseWaitDialog').modal();
+
+}
+
+function unBlockScreen() {
+    $('#pleaseWaitDialog').modal('hide');
+}
+
 app.controller('navigateWords', function ($scope, $http) {
     $http.get("availableLangs").then(function (response) {
         $scope.availableLangs = response.data;
@@ -22,12 +31,18 @@ app.controller('navigateWords', function ($scope, $http) {
 
     $scope.selectedWord = null;
     $scope.unFilledPack = [];
+
     $scope.selectWord = function (word) {
-        $http.get("wordItem?word=" + word + "&lang=" + $scope.selectedLang.code).then(function (response) {
+        blockScreen();
+        $http.get("wordItem?word=" + word + "&lang=" + $scope.selectedLang.code)
+            .then(function (response) {
             $scope.selectedWord = response.data;
-            $scope.unFilledPack = getUnfilledPack($scope.selectedWord.translatePacks, $scope.availableLangs, $scope.selectedWord.language.code);
-        });
+            $scope.unFilledPack = getUnfilledPack($scope.selectedWord.translatePacks, $scope.availableLangs, $scope.selectedWord.language.code);})
+                .finally(function () {
+                    unBlockScreen();
+                });
     };
+
 
     $scope.words = [];
     $scope.selectedLang = null;
@@ -44,22 +59,30 @@ app.controller('navigateWords', function ($scope, $http) {
     };
 
     $scope.addPack = function (word, packLang) {
-        var paramWordId = "wordId=" + word.id;
-        var paramLang = "lang=" + packLang.code;
-
-        $http.get("addPack?" + paramLang + "&" + paramWordId)
+        blockScreen();
+        $http({
+            url: "addPack",
+            method: "POST",
+            data: {
+                "word": word,
+                "language": packLang
+            }
+        })
             .then(function (response) {
-                $scope.selectedWord.translatePacks.push(response.data);
+                $scope.selectedWord = response.data;
                 $scope.unFilledPack = getUnfilledPack($scope.selectedWord.translatePacks, $scope.availableLangs, $scope.selectedWord.language.code);
             })
             .catch(function (reason) {
                 alert(reason.data.message);
             })
+            .finally(function () {
+                unBlockScreen();
+            })
         ;
     };
 
     $scope.addItem = function (wordtext, lang) {
-        debugger;
+
         var paramWordId = "word=" + wordtext;
         var paramLang = "lang=" + lang;
 
@@ -71,10 +94,8 @@ app.controller('navigateWords', function ($scope, $http) {
             })
             .catch(function (reason) {
                 alert(reason.data.message);
-            })
-        ;
+            });
     };
-
 
 
 });

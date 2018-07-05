@@ -1,5 +1,6 @@
 package com.translator.controller;
 
+import com.translator.dto.TranslateRq;
 import com.translator.exception.TranslatorException;
 import com.translator.generator.DefaultPhoneticGenerator;
 import com.translator.generator.LanguagePackCreator;
@@ -60,19 +61,20 @@ public class WEBController {
 
 
     @RequestMapping("/addPack")
-    public LanguagePack addPack(@RequestParam(value = "wordId") Integer wordId, @RequestParam(value = "lang") String lang) throws TranslatorException {
+    public Word addPack(@RequestBody TranslateRq translateRq) throws TranslatorException {
 
-        Language language = langRepository.findFirstByCode(lang);
-        Word word = wordRepository.findById(wordId);
-        if (word.getLanguagePack(language)!=null){
+        Word word = translateRq.getWord();
+        Language language = translateRq.getLanguage();
+
+        if (word.getLanguagePack(language) != null) {
             throw new TranslatorException("this translate pack is exist");
         }
 
         LanguagePack pack = new LanguagePackCreator().createAndFill(word, language);
         pack = packRepository.save(pack);
         word.addLanguagePack(pack);
-        wordRepository.save(word);
-        return pack;
+        word = wordRepository.save(word);
+        return word;
     }
 
 

@@ -9,8 +9,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "LanguagePack")
-public class LanguagePack {
-    private int id;
+public class LanguagePack  extends JPA  {
     private Language language;
     private String translate;
     private List<UsageSentence> sentences = new ArrayList<>();
@@ -24,17 +23,7 @@ public class LanguagePack {
     public LanguagePack() {
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "lang_id")
     public Language getLanguage() {
         return language;
@@ -53,7 +42,7 @@ public class LanguagePack {
         this.translate = translate;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinTable(
             name="PACK_SENTENCES_LINK",
             joinColumns=@JoinColumn(name="LANGUAGE_PACK_ID", referencedColumnName="ID"),

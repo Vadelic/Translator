@@ -12,8 +12,7 @@ import java.util.stream.Collectors;
  */
 @Entity
 @Table(name = "word")
-public class Word {
-    private int id;
+public class Word extends JPA{
     private Language language;
     private String resource;
 
@@ -32,15 +31,6 @@ public class Word {
     }
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lang_id")

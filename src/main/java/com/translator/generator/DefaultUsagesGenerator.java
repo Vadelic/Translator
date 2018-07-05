@@ -52,7 +52,7 @@ public class DefaultUsagesGenerator {
         List<UsageSentence> usageSentences = new ArrayList<>();
 
         for (Map.Entry<String, String> entry : usages.entrySet()) {
-            UsageSentence sentence = new UsageSentence( targetLang, entry.getKey(), entry.getValue());
+            UsageSentence sentence = new UsageSentence( entry.getKey(), entry.getValue());
             sentence.setResource(siteSource);
             usageSentences.add(sentence);
         }
