@@ -84,7 +84,9 @@ public class WEBController {
     }
 
     @RequestMapping("/addWord")
-    public Word addWord(@RequestParam(value = "word") String word, @RequestParam(value = "lang") String lang) {
+    public Word addWord(@RequestParam(value = "word") String word, @RequestParam(value = "lang") String lang) throws TranslatorException {
+        if (wordRepository.findWordByWordAndLanguageCode(word, lang) != null)
+            throw new TranslatorException("this word is exist");
         Word wordObj = new Word(word.toLowerCase(), langRepository.findFirstByCode(lang));
         return wordRepository.save(wordObj);
     }
@@ -92,5 +94,10 @@ public class WEBController {
     @RequestMapping("/saveTranslatePack")
     public LanguagePack saveTranslatePack(@RequestBody LanguagePack pack) {
         return packRepository.save(pack);
+    }
+
+    @RequestMapping("/saveWord")
+    public Word saveWord(@RequestBody Word word) {
+        return wordRepository.save(word);
     }
 }

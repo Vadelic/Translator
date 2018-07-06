@@ -6,11 +6,11 @@
 <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
         integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
 
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
@@ -37,23 +37,37 @@ crossorigin="anonymous"></script>
 
     /* Safari */
     @-webkit-keyframes spin {
-        0% { -webkit-transform: rotate(0deg); }
-        100% { -webkit-transform: rotate(360deg); }
+        0% {
+            -webkit-transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+        }
     }
 
     @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
     }
+
+     img {
+         width: 100%;
+         height: auto;
+     }
+
 </style>
 
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+<body ng-app="translatorApp" ng-controller="navigateWords">
 
-<div ng-app="translatorApp" ng-controller="navigateWords">
+<div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Translator by Lexicon</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -82,7 +96,8 @@ crossorigin="anonymous"></script>
                         <input ng-model="searchField" type="text" class="form-control" placeholder="Search word..."
                                aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <button ng-click="addItem(searchField, selectedLang.code)" class="btn btn-outline-secondary"
+                            <button ng-if="searchField" ng-click="addItem(searchField, selectedLang.code)"
+                                    class="btn btn-outline-secondary"
                                     type="button">+
                             </button>
                         </div>
@@ -97,21 +112,23 @@ crossorigin="anonymous"></script>
             </div>
 
             <div class="col-9" ng-if="selectedWord">
+                <div class="row">
 
-                <div>
-                    <h1>{{selectedWord.word}} <span class="phoneme">{{selectedWord.phoneme==null?'':'['+ selectedWord.phoneme+']'}}</span>
-                    </h1>
-
-                    <button class="btn" data-toggle="modal" data-target="#{{selectedWord.word}}"
-                            ng-click="edit(selectedWord)"><span class="fa fa-pencil"></span></button>
+                    <div>
+                        <h1>{{selectedWord.word}} <span class="phoneme">{{selectedWord.phoneme==null?'':'['+ selectedWord.phoneme+']'}}</span>
+                            <button class="btn" data-toggle="modal" data-target="#wordEditor"
+                                    ng-click="edit(selectedWord)"><span class="fa fa-pencil"></span></button>
+                        </h1>
+                        <div class="form-group col-md-6">Subject: {{selectedWord.subject}}</div>
+                        <button type="button" class="btn btn-outline-success" ng-click="addPack(selectedWord, lang)"
+                                ng-repeat="lang in unFilledPack">{{lang.description}}
+                        </button>
+                        <hr>
+                    </div>
+                    <div ng-if="selectedWord.image">
+                        <img src="image/{{selectedWord.image}}" class="img-thumbnail mr-3">
+                    </div>
                 </div>
-                <div class="form-group col-md-6"> {{selectedWord.subject}}</div>
-
-                <button type="button" class="btn btn-outline-success" ng-click="addPack(selectedWord, lang)"
-                        ng-repeat="lang in unFilledPack">{{lang.description}}
-                </button>
-
-                <hr>
 
 
                 <translate-description class="mb-2 mt-2" ng-repeat="pack in selectedWord.translatePacks"
@@ -130,8 +147,34 @@ crossorigin="anonymous"></script>
      data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="loader"></div>
+        <!--<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>-->
+        <!--<i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i>-->
     </div>
 </div>
 
+
+<!-- Modal WORD-->
+<div class="modal fade" id="wordEditor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">{{selectedWord.word}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" ng-model="tempWord.phoneme">
+                <input type="text" class="form-control" ng-model="tempWord.subject">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="saveWord(tempWord)">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

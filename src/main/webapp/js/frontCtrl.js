@@ -36,11 +36,12 @@ app.controller('navigateWords', function ($scope, $http) {
         blockScreen();
         $http.get("wordItem?word=" + word + "&lang=" + $scope.selectedLang.code)
             .then(function (response) {
-            $scope.selectedWord = response.data;
-            $scope.unFilledPack = getUnfilledPack($scope.selectedWord.translatePacks, $scope.availableLangs, $scope.selectedWord.language.code);})
-                .finally(function () {
-                    unBlockScreen();
-                });
+                $scope.selectedWord = response.data;
+                $scope.unFilledPack = getUnfilledPack($scope.selectedWord.translatePacks, $scope.availableLangs, $scope.selectedWord.language.code);
+            })
+            .finally(function () {
+                unBlockScreen();
+            });
     };
 
 
@@ -82,7 +83,10 @@ app.controller('navigateWords', function ($scope, $http) {
     };
 
     $scope.addItem = function (wordtext, lang) {
-
+        if (wordtext === undefined) {
+            alert('nonono');
+            return;
+        }
         var paramWordId = "word=" + wordtext;
         var paramLang = "lang=" + lang;
 
@@ -96,7 +100,22 @@ app.controller('navigateWords', function ($scope, $http) {
                 alert(reason.data.message);
             });
     };
+    $scope.tempWord={};
+    $scope.edit = function (original) {
+        $scope.tempWord = angular.copy(original);
+    };
 
-
+    $scope.saveWord = function (word) {
+        $http({
+            url: "saveWord",
+            method: "POST",
+            data: word
+        }).then(function (sucsses) {
+            $scope.selectedWord = sucsses.data;
+            $scope.edit($scope.selectedWord);
+        }, function (error) {
+            console.log(error.data.message);
+        });
+    };
 });
 

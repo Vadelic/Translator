@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class Word extends JPA{
     private Language language;
     private String resource;
+    private String image;
 
     private String word;
     private String subject;
@@ -30,7 +31,14 @@ public class Word extends JPA{
         this.language = language;
     }
 
+    @Column(name = "image")
+    public String getImage() {
+        return image;
+    }
 
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lang_id")

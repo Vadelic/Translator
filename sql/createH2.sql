@@ -17,6 +17,7 @@ INSERT INTO LANGUAGE (code, description) VALUES ('en', 'English');
 create table WORD (
   ID       INTEGER not null    primary key AUTO_INCREMENT,
   VERSION     TIMESTAMP,
+  IMAGE varchar (255),
   PHONEME  VARCHAR(255),
   RESOURCE VARCHAR(255),
   SUBJECT  VARCHAR(255),
